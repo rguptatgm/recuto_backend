@@ -113,6 +113,8 @@ Avoid commenting obvious or trivial code. Comments should add value to the code,
 - Daily updates
 - Task board to see current progress (Gleap?)
 - Time tracking?
+- Define each tasks for outsource developers in a document?
+- What do they need to do when completing a task before they allowed to create a PR? What do they need to test?
 
 
 # Softwareanforderungsdokument erstellen mit folgenden Inhalten
