@@ -105,3 +105,63 @@ Avoid commenting obvious or trivial code. Comments should add value to the code,
 - Localization
 - Explain each file (e.g. structure of schema, controller, service, etc.) and add examples
 - Explain roles and permissions structure (maybe also add mind map)
+- Move documentation to something like Mintlify to make in more readable?
+- Add examples for everything!
+- Pullrequest (sizes & duration)
+- Design (Figma)
+- Communication (Slack)
+- Daily updates
+- Task board to see current progress (Gleap?)
+- Time tracking?
+
+
+# Softwareanforderungsdokument erstellen mit folgenden Inhalten
+
+### Einführung:
+- Projektüberblick
+- Ziele und Zweck des Projekts
+- Kontaktdaten der Projektleitung
+
+### Funktionale Anforderungen:
+- Beschreibung der zu entwickelnden Funktionen
+- Use-Cases und Geschäftsregeln
+- Datenanforderungen
+
+###  Nicht-funktionale Anforderungen:
+- Performance-Anforderungen
+- Sicherheitsanforderungen
+- Usability und Zugänglichkeit
+
+### Technische Anforderungen:
+- Technologie-Stack
+- Drittanbieter-Integrationen
+- Plattform- und Browser-Kompatibilität
+
+### Code-Konventionen und Standards:
+- Coding-Standards, einschließlich Namensgebung, Formatierung und Kommentierung
+- Verzeichnis- und Dateistruktur
+- Code-Dokumentation Standards
+
+### Qualitätssicherung und Testing:
+- Teststrategie
+- Akzeptanzkriterien
+- Fehlerbehandlungs- und Debugging-Verfahren
+
+### Kommunikation und Berichterstattung:
+- Kommunikationspläne
+- Berichtsformat und -frequenz
+
+### Lieferplan:
+- Meilensteine und Liefertermine
+- Abnahmeverfahren
+
+### Rechtliche und vertragliche Anforderungen:
+- Eigentumsrechte
+- Datenschutz und Compliance-Anforderungen
+
+### Anhänge:
+- Glossar
+- Referenzen zu unterstützenden Dokumenten oder externen Ressourcen
+
+### Änderungsprotokoll:
+- Verfolgung von Änderungen am Dokument über die Zeit
