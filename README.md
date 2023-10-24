@@ -62,10 +62,21 @@ https://tree.nathanfriend.io/
 The project should follow these coding conventions:
 
 - Use TypeScript as the primary programming language.
+```ts
+class Person {
+  constructor(private name: string, private age: number) {}
+
+  public sayHello(): void {
+    console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
+  }
+}
+```
+
+- Use named arguments for methods
 - Use npm to manage dependencies.
 - Use the NestJS framework to build the application.
 - Use the Mongoose library to interact with MongoDB databases.
-- Use the GenericCrudService class to provide default CRUD methods for     working with MongoDB documents.
+- Use the `GenericCrudService` class to provide default CRUD methods for working with MongoDB documents.
 - Use the ObjectId class from the mongodb package to represent MongoDB ObjectIds.
 - Use the `async/await syntax` for handling asynchronous operations.
 - Use the `prepareCondition` function to prepare a filter query for finding a single document by its _id field.
@@ -89,4 +100,8 @@ Avoid commenting obvious or trivial code. Comments should add value to the code,
 ## Missing stuff for outsourcing
 - Explain queryHelper
 - Explain documentation
-- Explain idea behind folder structure
+- Explain idea behind folder structure (why schemas not in api folder, etc)
+- Projection
+- Localization
+- Explain each file (e.g. structure of schema, controller, service, etc.) and add examples
+- Explain roles and permissions structure (maybe also add mind map)
