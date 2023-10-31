@@ -27,16 +27,7 @@ export class UserProtection {
   }
 }
 
-export class UserPopulate {
-  // static DEFAULT() { // TODO das sollt nur als Beispiel dienen
-  //   return [
-  //     {
-  //       path: 'studios',
-  //       select: StudioProtection.DEFAULT(),
-  //     },
-  //   ];
-  // }
-}
+export class UserPopulate {}
 
 @Schema({
   timestamps: { createdAt: 'system.createdAt', updatedAt: 'system.modifiedAt' },
@@ -51,7 +42,7 @@ export class User {
   @Prop()
   email: string;
 
-  @Prop({ type: SystemSchema })
+  @Prop({ type: SystemSchema, required: false })
   system?: System;
 }
 

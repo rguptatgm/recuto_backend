@@ -6,6 +6,10 @@ import { envConfiguration } from './config/configuration.env';
 import { envValidation } from './config/validation.env';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './api/user/user.module';
+import { PermissionModule } from './api/shared/permission/permission.module';
+import { RoleModule } from './api/shared/role/role.module';
+import { UserRoleAssignModule } from './api/shared/userRoleAssign/user.role.assign.module';
+import { ProjectnModule } from './api/project/project.module';
 
 @Module({
   imports: [
@@ -28,6 +32,10 @@ import { UserModule } from './api/user/user.module';
     //! Modules
 
     UserModule,
+    PermissionModule,
+    RoleModule,
+    UserRoleAssignModule,
+    ProjectnModule,
   ],
   controllers: [AppController],
   providers: [AppService],
