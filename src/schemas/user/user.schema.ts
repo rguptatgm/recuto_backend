@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { System, SystemSchema } from '../system.schema';
 import { Document } from 'mongoose';
+import { UserAccount, UserAccountSchema } from './user.account.schema';
 
 export type UserDocument = User & Document;
 
@@ -41,6 +42,9 @@ export class User {
 
   @Prop()
   email: string;
+
+  @Prop({ type: [UserAccountSchema] })
+  accounts: UserAccount[];
 
   @Prop({ type: SystemSchema, required: false })
   system?: System;

@@ -9,7 +9,8 @@ export enum TimeZone {
 
 export enum AccountKind {
   INTERNAL = 'INTERNAL',
-  // e.g. Google, Apple, ...
+  GOOGLE = 'GOOGLE',
+  APPLE = 'APPLE',
 }
 
 export enum RoleAlias {
@@ -29,4 +30,13 @@ export enum UserType {
 
 export enum ResourceType {
   DEFAULT = 'DEFAULT',
+}
+
+export enum TokenType {
+  DEFAULT = 'DEFAULT',
+}
+
+export enum PlatformKind {
+  ANDROID = 'android',
+  IOS = 'ios',
 }

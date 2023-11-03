@@ -10,6 +10,7 @@ import { PermissionModule } from './api/shared/permission/permission.module';
 import { RoleModule } from './api/shared/role/role.module';
 import { UserRoleAssignModule } from './api/shared/userRoleAssign/user.role.assign.module';
 import { ProjectnModule } from './api/project/project.module';
+import { GlobalsModule } from './globals/globals.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ProjectnModule } from './api/project/project.module';
     RoleModule,
     UserRoleAssignModule,
     ProjectnModule,
+    GlobalsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

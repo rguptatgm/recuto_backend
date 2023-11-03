@@ -9,7 +9,7 @@ import {
 import { ObjectId } from 'mongodb';
 
 @Injectable()
-export abstract class GenericCrudService<T extends Document> {
+export class GenericCrudService<T extends Document> {
   constructor(private readonly model: Model<T>) {}
 
   //! DEFAULT CRUD METHODS

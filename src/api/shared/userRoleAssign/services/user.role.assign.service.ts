@@ -14,7 +14,7 @@ import {
   UserRoleAssignDocument,
 } from '../../../../schemas/user.role.assign/user.role.assign.schema';
 import { UserRoleAssignAggregationQueryService } from './user.role.assign.aggregation.query.service';
-import { GenericCrudService } from 'src/services/generic.crud.service';
+import { GenericCrudService } from 'src/globals/services/generic.crud.service';
 import { PermissionType } from 'src/globals/enums/application.permission.enum';
 import { getResourceUserFieldBasedOnUserType } from 'src/globals/helper/resource.helper';
 
