@@ -18,19 +18,19 @@ export class JwtPrepareService<T extends Document> {
     kind?: AccountKind;
     expiresIn?: string;
   }): Promise<any> {
-    const { userDocument: user } = args;
-
     // define default jwt payload
     let jwtPaylaod = {
-      _id: user._id,
-      // email: user.email, // TODO
+      user: {
+        ...args.userDocument.toJSON(), // TODO not save because of password field and other sensitive data
+      },
     };
 
     // if additional payload is given -> add them in jwt
     if (args.payload) {
       jwtPaylaod = {
-        _id: user._id,
-        // email: user.email, // TODO
+        user: {
+          ...args.userDocument.toJSON(),
+        },
 
         ...args.payload,
       };
@@ -42,7 +42,7 @@ export class JwtPrepareService<T extends Document> {
     });
 
     if (args.withoutRefreshToken) {
-      return { access_token: authJwtToken, user: user };
+      return { access_token: authJwtToken, user: args.userDocument };
     }
 
     // generate new refresh jwt token
@@ -53,7 +53,7 @@ export class JwtPrepareService<T extends Document> {
     const jwtResponse = {
       access_token: authJwtToken,
       refresh_token: authJwtRefreshToken,
-      user: user,
+      user: args.userDocument,
     };
 
     if (args.kind) {
