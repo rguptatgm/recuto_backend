@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { User, UserDocument } from 'src/schemas/user/user.schema';
-import { GenericAuthenticationService } from './generic.authentication.service';
-import { JwtPrepareService } from './jwt.prepare.service';
+import { GenericAuthenticationService } from './core/generic.authentication.service';
+import { JwtPrepareService } from './core/generic.jwt.prepare.service';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { GenericAuthenticationHelperService } from './generic.authentication.helper.service';
+import { GenericAuthenticationHelperService } from './core/generic.authentication.helper.service';
 import { AuthenticationData } from 'src/globals/interfaces/global.interface';
 
 @Injectable()
 export class UserAuthenticationService extends GenericAuthenticationService<UserDocument> {
   constructor(
-    protected readonly jwtPrepareService: JwtPrepareService,
+    protected readonly jwtPrepareService: JwtPrepareService<UserDocument>,
     @InjectModel(User.name) readonly model: Model<UserDocument>,
     protected readonly authenticationHelperService: GenericAuthenticationHelperService<UserDocument>,
   ) {

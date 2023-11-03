@@ -6,7 +6,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { JwtPrepareService } from '../services/jwt.prepare.service';
+import { JwtPrepareService } from '../services/core/generic.jwt.prepare.service';
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UserAuthenticationService } from '../services/user.authentication.service';
@@ -15,6 +15,7 @@ import { JwtRefreshAuthenticationGuard } from 'src/guards/jwt.refresh.authentica
 import { PermissionType } from 'src/globals/enums/application.permission.enum';
 import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
 import RefreshTokenDto from 'src/dtos/authentication/refresh.token.dto';
+import { UserDocument } from 'src/schemas/user/user.schema';
 
 // documentation
 @ApiTags('authentication')
@@ -22,7 +23,7 @@ import RefreshTokenDto from 'src/dtos/authentication/refresh.token.dto';
 @Controller('auth')
 export class AuthenticationController {
   constructor(
-    private readonly jwtPrepareService: JwtPrepareService,
+    private readonly jwtPrepareService: JwtPrepareService<UserDocument>,
     private readonly userRoleAssignService: UserRoleAssignService,
     private readonly userAuthenticationService: UserAuthenticationService,
   ) {}
@@ -93,7 +94,7 @@ export class AuthenticationController {
 
     if (!resource) {
       const result = await this.jwtPrepareService.prepareJwtResponse({
-        user: req['user'],
+        userDocument: req['user'],
         withoutRefreshToken: true,
       });
 
@@ -101,7 +102,7 @@ export class AuthenticationController {
     }
 
     const result = await this.jwtPrepareService.prepareJwtResponse({
-      user: req['user'],
+      userDocument: req['user'],
       withoutRefreshToken: true,
       payload: {
         resource: resource,

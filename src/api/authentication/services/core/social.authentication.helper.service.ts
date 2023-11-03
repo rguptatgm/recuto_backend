@@ -1,11 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
 import {
   PreparedAuthData,
   AuthenticationData,
-} from '../../../globals/interfaces/global.interface';
-import { AccountKind, PlatformKind } from '../../../globals/enums/global.enum';
+} from '../../../../globals/interfaces/global.interface';
+import {
+  AccountKind,
+  PlatformKind,
+} from '../../../../globals/enums/global.enum';
 import verifyAppleToken from 'verify-apple-id-token';
 import { OAuth2Client } from 'google-auth-library';
 

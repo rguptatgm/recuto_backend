@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   Document,
   FilterQuery,
@@ -417,14 +417,7 @@ export class GenericCrudService<T extends Document> {
     }
 
     if (!searchQuery) {
-      // throw new RequestHttpException( // TODO configure error handling
-      //   {
-      //     className: 'GenericCrudService',
-      //     methodName: 'genericSearch',
-      //     messagePath: 'error.INVALID_REQUEST',
-      //   },
-      //   400,
-      // );
+      throw new BadRequestException('Invalid search query');
     }
 
     if (args.additionalStage) {

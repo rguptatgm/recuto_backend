@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Put, Req } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -17,8 +17,8 @@ import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
 @ApiTags('users')
 @ApiBearerAuth('JWT')
 //
-// @UseGuards(JwtAuthenticationGuard) // TODO wenn die JWT logik aufgesetzt ist kann auch mit hilfe von Guards die authentication durchgeführt werden
-// TODO diese Guards können auf Controller oder auf einzelne Routen angewendet werden (@nestjs/passport)
+// @UseGuards(JwtAuthenticationGuard)
+
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -35,11 +35,10 @@ export class UserController {
   //
   @Get('/me')
   async getUser(@Req() req: Request): Promise<any> {
-    // TODO hier als beispiel wie die CRUD service funktioniert und wie die protection und populate mitgegeben werden kann
     return await this.userService.findOne({
       conditions: { email: 'test@test.at' },
       projection: UserProtection.DEFAULT(),
-      // populate: UserPopulate.DEFAULT(), // TODO das sollt nur als Beispiel dienen
+      // populate: UserPopulate.DEFAULT(),
       options: {},
     });
   }
@@ -56,16 +55,12 @@ export class UserController {
   //
   //
   @Put('/me')
-  async updateUserMe(
-    @Body() updateUserDto: UpdateUserDto, // TODO hier die DTO die die validation durchführt und definiert welche daten mitgegeben werden müssen und welches format sie haben müssen
-    @Req() req: Request,
-  ): Promise<any> {
-    // TODO hier als beispiel wenn daten vom client mitgegeben werden. Durch die DTO wird die validation automatisch durchgeführt und falls die daten nicht valide sind wird ein 400 zurückgegeben bevor der controller überhaupt aufgerufen wird
+  async updateUserMe(@Body() updateUserDto: UpdateUserDto): Promise<any> {
     return await this.userService.updateOne({
       conditions: { email: 'test@test.at' },
       changes: updateUserDto,
       projection: UserProtection.DEFAULT(),
-      // populate: UserPopulate.DEFAULT(), // TODO das sollt nur als Beispiel dienen
+      // populate: UserPopulate.DEFAULT(),
       options: {},
     });
   }

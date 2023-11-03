@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-
 import { Document, Model } from 'mongoose';
-import { JwtPrepareService } from './jwt.prepare.service';
+import { JwtPrepareService } from './generic.jwt.prepare.service';
 import { GenericCrudService } from 'src/globals/services/generic.crud.service';
 import { AccountKind } from 'src/globals/enums/global.enum';
 import { GenericAuthenticationHelperService } from './generic.authentication.helper.service';
@@ -12,7 +11,7 @@ export abstract class GenericAuthenticationService<T extends Document> {
   protected crudService: GenericCrudService<T>;
 
   constructor(
-    protected readonly jwtPrepareService: JwtPrepareService,
+    protected readonly jwtPrepareService: JwtPrepareService<T>,
     protected readonly model: Model<T>,
     protected readonly authenticationHelperService: GenericAuthenticationHelperService<T>,
   ) {
@@ -49,7 +48,7 @@ export abstract class GenericAuthenticationService<T extends Document> {
 
     // prepare JWT response
     const jwtResponse = await this.jwtPrepareService.prepareJwtResponse({
-      user: user,
+      userDocument: user,
       kind: preparedAuthData.kind,
     });
 

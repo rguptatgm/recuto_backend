@@ -88,7 +88,9 @@ export abstract class GenericAuthenticationHelperService<T extends Document> {
     }
   }
 
-  async findAndVerifyUser(args: { preparedAuthData: PreparedAuthData }) {
+  async findAndVerifyUser(args: {
+    preparedAuthData: PreparedAuthData;
+  }): Promise<T> {
     const authInfo = args.preparedAuthData;
 
     let user: any;

@@ -4,11 +4,11 @@ import { UserModule } from '../user/user.module';
 import { AuthenticationController } from './controllers/authentication.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { JwtPrepareService } from './services/jwt.prepare.service';
+import { JwtPrepareService } from './services/core/generic.jwt.prepare.service';
 import { JwtStrategyRefresh } from './strategies/jwt.strategy.refresh';
 import { UserRoleAssignModule } from 'src/api/shared/userRoleAssign/user.role.assign.module';
 import { UserAuthenticationService } from './services/user.authentication.service';
-import { SocialAuthenticationHelperService } from './services/social.authentication.helper.service';
+import { SocialAuthenticationHelperService } from './services/core/social.authentication.helper.service';
 
 @Module({
   imports: [

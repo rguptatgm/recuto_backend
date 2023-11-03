@@ -1,36 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UserDocument } from 'src/schemas/user/user.schema';
 import { AccountKind } from 'src/globals/enums/global.enum';
+import { Document } from 'mongoose';
 
 @Injectable()
-export class JwtPrepareService {
+export class JwtPrepareService<T extends Document> {
   constructor(
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
 
   async prepareJwtResponse(args: {
-    user: UserDocument; // TODO change to dynamic T
+    userDocument: T;
     withoutRefreshToken?: boolean;
     payload?: object;
     kind?: AccountKind;
     expiresIn?: string;
   }): Promise<any> {
-    const { user } = args;
+    const { userDocument: user } = args;
 
     // define default jwt payload
     let jwtPaylaod = {
       _id: user._id,
-      email: user.email,
+      // email: user.email, // TODO
     };
 
     // if additional payload is given -> add them in jwt
     if (args.payload) {
       jwtPaylaod = {
         _id: user._id,
-        email: user.email,
+        // email: user.email, // TODO
 
         ...args.payload,
       };
