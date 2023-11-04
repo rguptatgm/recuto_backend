@@ -4,17 +4,17 @@ import { GenericAuthenticationService } from './core/generic.authentication.serv
 import { JwtPrepareService } from './core/generic.jwt.prepare.service';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { GenericAuthenticationHelperService } from './core/generic.authentication.helper.service';
 import { AuthenticationData } from 'src/globals/interfaces/global.interface';
+import { SocialAuthenticationHelperService } from './core/social.authentication.helper.service';
 
 @Injectable()
 export class UserAuthenticationService extends GenericAuthenticationService<UserDocument> {
   constructor(
     protected readonly jwtPrepareService: JwtPrepareService<UserDocument>,
     @InjectModel(User.name) readonly model: Model<UserDocument>,
-    protected readonly authenticationHelperService: GenericAuthenticationHelperService<UserDocument>,
+    protected readonly socialAuthHelperService: SocialAuthenticationHelperService,
   ) {
-    super(jwtPrepareService, model, authenticationHelperService);
+    super(jwtPrepareService, model, socialAuthHelperService);
   }
 
   async findUserByIdentifier(
@@ -22,10 +22,12 @@ export class UserAuthenticationService extends GenericAuthenticationService<User
   ): Promise<UserDocument> {
     const { email } = authenticationData.authDto;
 
-    return await this.crudService.findOne({
+    const res = await this.findOne({
       conditions: {
         email: email,
       },
     });
+
+    return res as any;
   }
 }

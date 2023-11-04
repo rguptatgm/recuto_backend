@@ -11,6 +11,7 @@ import { RoleModule } from './api/shared/role/role.module';
 import { UserRoleAssignModule } from './api/shared/userRoleAssign/user.role.assign.module';
 import { ProjectnModule } from './api/project/project.module';
 import { GlobalsModule } from './globals/globals.module';
+import { AuthenticationModule } from './api/authentication/authentication.module';
 
 @Module({
   imports: [
@@ -31,11 +32,11 @@ import { GlobalsModule } from './globals/globals.module';
     }),
 
     //! Modules
-
+    AuthenticationModule,
+    UserRoleAssignModule,
     UserModule,
     PermissionModule,
     RoleModule,
-    UserRoleAssignModule,
     ProjectnModule,
     GlobalsModule,
   ],

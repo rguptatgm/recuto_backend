@@ -9,13 +9,13 @@ import {
 import { JwtPrepareService } from '../services/core/generic.jwt.prepare.service';
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
 import { AuthGuard } from '@nestjs/passport';
-import { UserAuthenticationService } from '../services/user.authentication.service';
 import { TokenType, UserType } from 'src/globals/enums/global.enum';
 import { JwtRefreshAuthenticationGuard } from 'src/guards/jwt.refresh.authentication.guard';
 import { PermissionType } from 'src/globals/enums/application.permission.enum';
 import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
 import RefreshTokenDto from 'src/dtos/authentication/refresh.token.dto';
 import { UserDocument } from 'src/schemas/user/user.schema';
+import { UserAuthenticationService } from '../services/user.authentication.service';
 
 // documentation
 @ApiTags('authentication')
@@ -47,7 +47,6 @@ export class AuthenticationController {
         customData: {}, // pass custom data here and it will be available in all abstract methods of the authentication
       },
     });
-
     return signUpResult;
   }
 
@@ -70,7 +69,6 @@ export class AuthenticationController {
         customData: {}, // pass custom data here and it will be available in all abstract methods of the authentication
       },
     });
-
     return result;
   }
 
