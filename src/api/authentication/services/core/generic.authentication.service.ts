@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Document, Model } from 'mongoose';
 import { JwtPrepareService } from './generic.jwt.prepare.service';
 import { GenericCrudService } from 'src/globals/services/generic.crud.service';
@@ -19,9 +19,11 @@ export abstract class GenericAuthenticationService<
   T extends Document,
 > extends GenericCrudService<T> {
   constructor(
-    protected readonly jwtPrepareService: JwtPrepareService<T>,
     protected readonly model: Model<T>,
-    protected readonly socialAuthHelperService: SocialAuthenticationHelperService,
+    @Inject(JwtPrepareService<T>)
+    protected readonly jwtPrepareService?: JwtPrepareService<T>,
+    @Inject(SocialAuthenticationHelperService)
+    protected readonly socialAuthHelperService?: SocialAuthenticationHelperService,
   ) {
     super(model);
   }
