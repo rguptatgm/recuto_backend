@@ -33,15 +33,20 @@ export abstract class GenericAuthenticationService<
   ): Promise<T | null>;
 
   async signIn(args: { authData: AuthenticationData }) {
+    console.log('signIn', args);
     //Verify user information
     const preparedAuthData = await this.verifyAndGetUserInformationForType({
       authData: args.authData,
     });
 
+    console.log('preparedAuthData', preparedAuthData);
+
     // Find user by email and social uid if the account kind is not internal
     const user = await this.findAndVerifyUser({
       preparedAuthData: preparedAuthData,
     });
+
+    console.log('user findAndVerifyUser()', user);
 
     // If type internal and user does not exist throw error
     if (preparedAuthData.kind === AccountKind.INTERNAL && !user) {
@@ -52,11 +57,15 @@ export abstract class GenericAuthenticationService<
     if (preparedAuthData.kind !== AccountKind.INTERNAL && !user) {
       return this.signUp(args);
     }
+
+    console.log('bevore prepareJwtResponse');
+
     // prepare JWT response
     const jwtResponse = await this.jwtPrepareService.prepareJwtResponse({
       userDocument: user,
       kind: preparedAuthData.kind,
     });
+
     return jwtResponse;
   }
 
@@ -65,15 +74,23 @@ export abstract class GenericAuthenticationService<
     const user = await this.findUniqueUserByIdentifierForKind({
       authData: args.authData,
     });
+
+    console.log('user', user);
+
     // If user does not exist create user
     if (!user) {
+      console.log('user does not exist');
       const userInformation = await this.verifyAndGetUserInformationForType({
         authData: args.authData,
       });
 
+      console.log('after prepare user information');
+
       const accountInfo = await this.prepareAccountForKind({
         authInfo: userInformation,
       });
+
+      console.log('after accountInfo');
 
       const document = {
         email: userInformation.email,
@@ -82,6 +99,8 @@ export abstract class GenericAuthenticationService<
         deviceIdentifierID: userInformation.userInfo.deviceIdentifierID,
         accounts: [accountInfo],
       };
+
+      console.log('bevore create', document);
 
       await this.create({
         document: document,

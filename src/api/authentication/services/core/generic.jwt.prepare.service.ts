@@ -18,6 +18,7 @@ export class JwtPrepareService<T extends Document> {
     kind?: AccountKind;
     expiresIn?: string;
   }): Promise<any> {
+    console.log('prepareJwtResponse() ', args);
     // define default jwt payload
     let jwtPaylaod = {
       user: {

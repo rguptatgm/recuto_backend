@@ -38,7 +38,7 @@ export class AuthenticationController {
   })
   //
   //
-  @UseGuards(AuthGuard('api-key'))
+  // @UseGuards(AuthGuard('api-key'))
   @Post('/sign-up')
   async signUp(@Body() authDto: AuthenticationDto): Promise<any> {
     const signUpResult = await this.userAuthenticationService.signUp({
@@ -60,7 +60,7 @@ export class AuthenticationController {
   })
   //
   //
-  @UseGuards(AuthGuard('api-key'))
+  // @UseGuards(AuthGuard('api-key'))
   @Post('/sign-in')
   async signIn(@Body() authDto: AuthenticationDto): Promise<any> {
     const result = await this.userAuthenticationService.signIn({

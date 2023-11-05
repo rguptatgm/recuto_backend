@@ -16,12 +16,10 @@ export class UserAuthenticationService extends GenericAuthenticationService<User
   ): Promise<UserDocument> {
     const { email } = authenticationData.authDto;
 
-    const res = await this.findOne({
+    return await this.findOne({
       conditions: {
         email: email,
       },
     });
-
-    return res as any;
   }
 }
