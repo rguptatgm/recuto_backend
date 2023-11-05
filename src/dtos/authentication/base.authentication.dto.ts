@@ -13,11 +13,6 @@ class BaseAuthenticationDto {
   @ApiProperty({ type: String })
   lastName?: string;
 
-  @IsOptional()
-  @IsString()
-  @ApiProperty({ type: String })
-  email?: string;
-
   @IsEnum(AccountKind)
   @ApiProperty({ type: String })
   kind: AccountKind;

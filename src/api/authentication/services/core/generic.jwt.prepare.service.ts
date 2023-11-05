@@ -21,7 +21,7 @@ export class JwtPrepareService<T extends Document> {
     // define default jwt payload
     let jwtPaylaod = {
       user: {
-        ...args.userDocument.toJSON(), // TODO not save because of password field and other sensitive data
+        ...args.userDocument, // TODO not save because of password field and other sensitive data
       },
     };
 
@@ -29,7 +29,7 @@ export class JwtPrepareService<T extends Document> {
     if (args.payload) {
       jwtPaylaod = {
         user: {
-          ...args.userDocument.toJSON(),
+          ...args.userDocument,
         },
 
         ...args.payload,

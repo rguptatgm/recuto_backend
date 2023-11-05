@@ -50,11 +50,13 @@ export abstract class GenericAuthenticationService<
     if (preparedAuthData.kind !== AccountKind.INTERNAL && !user) {
       return this.signUp(args);
     }
+
     // prepare JWT response
     const jwtResponse = await this.jwtPrepareService.prepareJwtResponse({
       userDocument: user,
       kind: preparedAuthData.kind,
     });
+
     return jwtResponse;
   }
 
@@ -183,6 +185,8 @@ export abstract class GenericAuthenticationService<
           userInfo: {
             deviceIdentifierID: args.authData.authDto.deviceIdentifierID,
             password: args.authData.authDto.password,
+            firstName: args.authData.authDto.firstName,
+            lastName: args.authData.authDto.lastName,
           },
         };
 
