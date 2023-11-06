@@ -8,7 +8,6 @@ import {
 } from '@nestjs/swagger';
 import { JwtPrepareService } from '../services/core/generic.jwt.prepare.service';
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
-import { AuthGuard } from '@nestjs/passport';
 import { TokenType, UserType } from 'src/globals/enums/global.enum';
 import { JwtRefreshAuthenticationGuard } from 'src/guards/jwt.refresh.authentication.guard';
 import { PermissionType } from 'src/globals/enums/application.permission.enum';
@@ -38,7 +37,6 @@ export class AuthenticationController {
   })
   //
   //
-  // @UseGuards(AuthGuard('api-key'))
   @Post('/sign-up')
   async signUp(@Body() authDto: AuthenticationDto): Promise<any> {
     const signUpResult = await this.userAuthenticationService.signUp({
@@ -60,7 +58,6 @@ export class AuthenticationController {
   })
   //
   //
-  // @UseGuards(AuthGuard('api-key'))
   @Post('/sign-in')
   async signIn(@Body() authDto: AuthenticationDto): Promise<any> {
     const result = await this.userAuthenticationService.signIn({
