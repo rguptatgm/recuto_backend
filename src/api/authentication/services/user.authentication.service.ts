@@ -4,7 +4,11 @@ import { GenericAuthenticationService } from './core/generic.authentication.serv
 import { JwtPrepareService } from './core/generic.jwt.prepare.service';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { AuthenticationData } from 'src/globals/interfaces/global.interface';
+import {
+  AuthenticationData,
+  PreparedAuthData,
+  PreparedUserInfo,
+} from 'src/globals/interfaces/global.interface';
 import { SocialAuthenticationHelperService } from './core/social.authentication.helper.service';
 
 @Injectable()
@@ -19,15 +23,26 @@ export class UserAuthenticationService extends GenericAuthenticationService<User
 
   async findUserByIdentifier(
     authenticationData: AuthenticationData,
+    additionalCondition?: any,
   ): Promise<UserDocument> {
     const { email } = authenticationData.authDto;
 
-    const res = await this.findOne({
+    return await this.findOne({
       conditions: {
         email: email,
+        ...additionalCondition,
       },
     });
+  }
 
-    return res as any;
+  prepareUserInfo(peparedAuthData: PreparedAuthData): PreparedUserInfo {
+    const preapredUserInfo: PreparedUserInfo = {
+      firstName: peparedAuthData.userInfo.firstName,
+      lastName: peparedAuthData.userInfo.lastName,
+      deviceIdentifierID: peparedAuthData.userInfo.deviceIdentifierID,
+      profileImageUrl: peparedAuthData.userInfo.profileImageUrl,
+    };
+
+    return preapredUserInfo;
   }
 }

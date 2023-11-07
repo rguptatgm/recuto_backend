@@ -37,17 +37,19 @@ export interface ResourcePermission {
   membership: RoleMmbership;
 }
 
+export interface PreparedUserInfo {
+  firstName?: string;
+  lastName?: string;
+  deviceIdentifierID?: string;
+  profileImageUrl?: string;
+}
+
 export interface PreparedAuthData {
   kind: AccountKind;
   email: string;
-  userInfo: {
-    firstName?: string;
-    lastName?: string;
-    deviceIdentifierID?: string;
-    password?: string;
-    socialUid?: string;
-    profileImageUrl?: string;
-  };
+  password?: string;
+  socialUid?: string;
+  userInfo: PreparedUserInfo;
 }
 
 export interface AuthenticationData {

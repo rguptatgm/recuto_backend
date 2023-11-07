@@ -6,6 +6,7 @@ import { AccountKind } from 'src/globals/enums/global.enum';
 import {
   AuthenticationData,
   PreparedAuthData,
+  PreparedUserInfo,
 } from 'src/globals/interfaces/global.interface';
 import {
   checkIfPasswordIsValid,
@@ -28,7 +29,19 @@ export abstract class GenericAuthenticationService<
 
   abstract findUserByIdentifier(
     authenticationData: AuthenticationData,
+    additionalCondition?: any,
   ): Promise<T | null>;
+
+  protected prepareUserInfo(
+    peparedAuthData: PreparedAuthData,
+  ): PreparedUserInfo {
+    return {
+      firstName: peparedAuthData.userInfo.firstName,
+      lastName: peparedAuthData.userInfo.lastName,
+      deviceIdentifierID: peparedAuthData.userInfo.deviceIdentifierID,
+      profileImageUrl: peparedAuthData.userInfo.profileImageUrl,
+    };
+  }
 
   async signIn(args: { authData: AuthenticationData }) {
     //Verify user information
@@ -36,9 +49,15 @@ export abstract class GenericAuthenticationService<
       authData: args.authData,
     });
 
+    // merge auth data with prepared auth data
+    const authData: AuthenticationData = {
+      ...args.authData,
+      preparedAuthData,
+    };
+
     // Find user by email and social uid if the account kind is not internal
     const user = await this.findAndVerifyUser({
-      preparedAuthData: preparedAuthData,
+      authData,
     });
 
     // If type internal and user does not exist throw error
@@ -65,31 +84,31 @@ export abstract class GenericAuthenticationService<
     const user = await this.findUniqueUserByIdentifierForKind({
       authData: args.authData,
     });
+
     // If user does not exist create user
     if (!user) {
-      const userInformation = await this.verifyAndGetUserInformationForType({
+      const preparedAuthData = await this.verifyAndGetUserInformationForType({
         authData: args.authData,
       });
 
-      const accountInfo = await this.prepareAccountForKind({
-        authInfo: userInformation,
+      const userAccount = await this.prepareAccountForKind({
+        authInfo: preparedAuthData,
       });
 
-      const document = {
-        email: userInformation.email,
-        firstName: userInformation.userInfo.firstName,
-        lastName: userInformation.userInfo.lastName,
-        deviceIdentifierID: userInformation.userInfo.deviceIdentifierID,
-        accounts: [accountInfo],
-      };
+      // Use the new method to create the user document
+      const preparedUserData = await this.prepareUserInfo(preparedAuthData);
 
       await this.create({
-        document: document,
+        document: {
+          ...preparedUserData,
+          accounts: [userAccount],
+        },
       });
 
       // Sign in new user
       return this.signIn(args);
     }
+
     // Otherwise check if user with specific account kind exists
     return this.handleExistingUserSignUp({
       authData: args.authData,
@@ -101,14 +120,14 @@ export abstract class GenericAuthenticationService<
     authData: AuthenticationData;
     userDocuemnt: T;
   }) {
-    const userInformation = await this.verifyAndGetUserInformationForType({
+    const preparedAuthData = await this.verifyAndGetUserInformationForType({
       authData: args.authData,
     });
 
     // check if kind in accounts array already exists. if yes check if social and sign in otherwise throw error
     // if kind does not exist push it to accounts array but only if kind is social
     const account = (args?.userDocuemnt as any)?.accounts.find(
-      (account) => account.kind === userInformation.kind,
+      (account) => account.kind === preparedAuthData.kind,
     );
 
     // Check if social and sign in otherwise throw error
@@ -120,15 +139,15 @@ export abstract class GenericAuthenticationService<
     }
 
     // If kind does not exist push it to accounts array but only if kind is social
-    if (userInformation.kind === AccountKind.INTERNAL) {
+    if (preparedAuthData.kind === AccountKind.INTERNAL) {
       throw new BadRequestException('Account already exists');
     }
 
-    const accountInfo = await this.prepareAccountForKind({
-      authInfo: userInformation,
+    const userAccount = await this.prepareAccountForKind({
+      authInfo: preparedAuthData,
     });
 
-    (args.userDocuemnt as any).accounts.push(accountInfo);
+    (args.userDocuemnt as any).accounts.push(userAccount);
 
     await this.updateOne({
       conditions: { _id: args.userDocuemnt._id } as any,
@@ -166,6 +185,7 @@ export abstract class GenericAuthenticationService<
         const googleUserInformation =
           await this.socialAuthHelperService.verifyGoogleToken({
             authenticationData: args.authData,
+            prepareUserInfoFn: this.prepareUserInfo,
           });
 
         return googleUserInformation;
@@ -174,6 +194,7 @@ export abstract class GenericAuthenticationService<
         const appleUserInformation =
           await this.socialAuthHelperService.verifyAppleToken({
             authenticationData: args.authData,
+            prepareUserInfoFn: this.prepareUserInfo,
           });
 
         return appleUserInformation;
@@ -182,15 +203,11 @@ export abstract class GenericAuthenticationService<
         const authData: PreparedAuthData = {
           kind: AccountKind.INTERNAL,
           email: args.authData.authDto.email,
-          userInfo: {
-            deviceIdentifierID: args.authData.authDto.deviceIdentifierID,
-            password: args.authData.authDto.password,
-            firstName: args.authData.authDto.firstName,
-            lastName: args.authData.authDto.lastName,
-          },
+          password: args.authData.authDto.password,
+          userInfo: this.prepareUserInfo(args.authData.preparedAuthData),
         };
 
-        if (!authData?.email || !authData?.userInfo?.password) {
+        if (!authData?.email || !authData?.password) {
           throw new BadRequestException('Invalid credentials');
         }
 
@@ -202,20 +219,14 @@ export abstract class GenericAuthenticationService<
   }
 
   private async findAndVerifyUser(args: {
-    preparedAuthData: PreparedAuthData;
+    authData: AuthenticationData;
   }): Promise<T> {
-    const authInfo = args.preparedAuthData;
+    const authInfo = args.authData.preparedAuthData;
 
     let user: any;
     switch (authInfo.kind) {
       case AccountKind.INTERNAL:
-        const internalCondition = {
-          email: authInfo.email,
-        };
-
-        user = await this.findOne({
-          conditions: internalCondition as any,
-        });
+        user = await this.findUserByIdentifier(args.authData);
 
         // get internal account for password validation
         const internalAccount = user.accounts.find(
@@ -225,7 +236,7 @@ export abstract class GenericAuthenticationService<
         // Check if password is valid
         const valid = await checkIfPasswordIsValid({
           storedPassword: internalAccount.password,
-          reqPassword: authInfo.userInfo.password,
+          reqPassword: authInfo.password,
         });
 
         if (!valid) {
@@ -235,14 +246,10 @@ export abstract class GenericAuthenticationService<
 
       case AccountKind.GOOGLE:
       case AccountKind.APPLE:
-        const socialCondition = {
-          email: authInfo.email,
-          'accounts.socialUid': authInfo.userInfo.socialUid,
+        // find user by identifier and social credentials
+        user = await this.findUserByIdentifier(args.authData, {
+          'accounts.socialUid': authInfo.socialUid,
           'accounts.kind': authInfo.kind,
-        };
-
-        user = await this.findOne({
-          conditions: socialCondition as any,
         });
         break;
 
@@ -272,7 +279,7 @@ export abstract class GenericAuthenticationService<
       case AccountKind.INTERNAL:
         account = {
           kind: authInfo.kind,
-          password: await hashPassword(authInfo.userInfo.password),
+          password: await hashPassword(authInfo.password),
         };
         break;
 
@@ -280,7 +287,7 @@ export abstract class GenericAuthenticationService<
       case AccountKind.APPLE:
         account = {
           kind: authInfo.kind,
-          socialUid: authInfo.userInfo.socialUid,
+          socialUid: authInfo.socialUid,
         };
         break;
 

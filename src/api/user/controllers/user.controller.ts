@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Req } from '@nestjs/common';
+import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -17,8 +17,7 @@ import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
 @ApiTags('users')
 @ApiBearerAuth('JWT')
 //
-// @UseGuards(JwtAuthenticationGuard)
-
+@UseGuards(JwtAuthenticationGuard)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -35,8 +34,9 @@ export class UserController {
   //
   @Get('/me')
   async getUser(@Req() req: Request): Promise<any> {
+    console.log(req['user']);
     return await this.userService.findOne({
-      conditions: { email: 'test@test.at' },
+      conditions: { _id: req['user']._id },
       projection: UserProtection.DEFAULT(),
       // populate: UserPopulate.DEFAULT(),
       options: {},

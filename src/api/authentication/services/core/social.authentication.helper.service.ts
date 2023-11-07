@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   PreparedAuthData,
   AuthenticationData,
+  PreparedUserInfo,
 } from '../../../../globals/interfaces/global.interface';
 import {
   AccountKind,
@@ -17,6 +18,7 @@ export class SocialAuthenticationHelperService {
 
   async verifyGoogleToken(args: {
     authenticationData: AuthenticationData;
+    prepareUserInfoFn: (preparedAuthData: PreparedAuthData) => PreparedUserInfo;
   }): Promise<PreparedAuthData> {
     const { socialVerifyToken, platform } = args.authenticationData.authDto;
 
@@ -46,16 +48,22 @@ export class SocialAuthenticationHelperService {
       const ticket = await client.verifyIdToken({
         idToken: socialVerifyToken,
       });
+
       const payload = ticket.getPayload();
 
       const userInfo: PreparedAuthData = {
         kind: AccountKind.GOOGLE,
         email: payload.email,
-        userInfo: {
-          socialUid: payload.sub,
-          firstName: payload.given_name,
-          lastName: payload.family_name,
-        },
+        socialUid: payload.sub,
+        userInfo: args.prepareUserInfoFn({
+          ...args.authenticationData.preparedAuthData,
+          userInfo: {
+            ...args.authenticationData.preparedAuthData.userInfo,
+            // override firstName and lastName with the returned data from google
+            firstName: payload.given_name,
+            lastName: payload.family_name,
+          },
+        }),
       };
 
       return userInfo;
@@ -66,11 +74,10 @@ export class SocialAuthenticationHelperService {
 
   async verifyAppleToken(args: {
     authenticationData: AuthenticationData;
+    prepareUserInfoFn: (preparedAuthData: PreparedAuthData) => PreparedUserInfo;
   }): Promise<PreparedAuthData> {
     try {
-      const { socialVerifyToken, firstName, lastName } =
-        args.authenticationData.authDto;
-
+      const { socialVerifyToken } = args.authenticationData.authDto;
       const bundleId = this.configService.get('IOS_BUNDLE_ID');
 
       if (bundleId == null) {
@@ -85,11 +92,10 @@ export class SocialAuthenticationHelperService {
       const userInfo: PreparedAuthData = {
         kind: AccountKind.APPLE,
         email: response.email,
-        userInfo: {
-          socialUid: response.sub,
-          firstName: firstName,
-          lastName: lastName,
-        },
+        socialUid: response.sub,
+        userInfo: args.prepareUserInfoFn(
+          args.authenticationData.preparedAuthData,
+        ),
       };
 
       return userInfo;
