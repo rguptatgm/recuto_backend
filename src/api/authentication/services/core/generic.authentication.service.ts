@@ -32,15 +32,14 @@ export abstract class GenericAuthenticationService<
     additionalCondition?: any,
   ): Promise<T | null>;
 
-  protected prepareUserInfo(
-    peparedAuthData: PreparedAuthData,
-  ): PreparedUserInfo {
-    return {
-      firstName: peparedAuthData.userInfo.firstName,
-      lastName: peparedAuthData.userInfo.lastName,
-      deviceIdentifierID: peparedAuthData.userInfo.deviceIdentifierID,
-      profileImageUrl: peparedAuthData.userInfo.profileImageUrl,
+  protected prepareUserInfo(authData: AuthenticationData): PreparedUserInfo {
+    const preapredUserInfo: PreparedUserInfo = {
+      firstName: authData.authDto.firstName,
+      deviceIdentifierID: authData.authDto.deviceIdentifierID,
+      lastName: authData.authDto.lastName,
     };
+
+    return preapredUserInfo;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -102,12 +101,10 @@ export abstract class GenericAuthenticationService<
         authInfo: preparedAuthData,
       });
 
-      // Use the new method to create the user document
-      const preparedUserData = await this.prepareUserInfo(preparedAuthData);
-
       const createdUser = await this.create({
         document: {
-          ...preparedUserData,
+          email: preparedAuthData.email,
+          ...preparedAuthData.userInfo,
           accounts: [userAccount],
         },
       });
@@ -216,7 +213,7 @@ export abstract class GenericAuthenticationService<
           kind: AccountKind.INTERNAL,
           email: args.authData.authDto.email,
           password: args.authData.authDto.password,
-          userInfo: this.prepareUserInfo(args.authData.preparedAuthData),
+          userInfo: this.prepareUserInfo(args.authData),
         };
 
         if (!authData?.email || !authData?.password) {
@@ -239,6 +236,10 @@ export abstract class GenericAuthenticationService<
     switch (authInfo.kind) {
       case AccountKind.INTERNAL:
         user = await this.findUserByIdentifier(args.authData);
+
+        if (!user) {
+          throw new BadRequestException('invalid credentials');
+        }
 
         // get internal account for password validation
         const internalAccount = user.accounts.find(

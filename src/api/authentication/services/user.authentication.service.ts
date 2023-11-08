@@ -6,7 +6,6 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import {
   AuthenticationData,
-  PreparedAuthData,
   PreparedUserInfo,
 } from 'src/globals/interfaces/global.interface';
 import { SocialAuthenticationHelperService } from './core/social.authentication.helper.service';
@@ -35,12 +34,11 @@ export class UserAuthenticationService extends GenericAuthenticationService<User
     });
   }
 
-  prepareUserInfo(peparedAuthData: PreparedAuthData): PreparedUserInfo {
+  prepareUserInfo(authData: AuthenticationData): PreparedUserInfo {
     const preapredUserInfo: PreparedUserInfo = {
-      firstName: peparedAuthData.userInfo.firstName,
-      lastName: peparedAuthData.userInfo.lastName,
-      deviceIdentifierID: peparedAuthData.userInfo.deviceIdentifierID,
-      profileImageUrl: peparedAuthData.userInfo.profileImageUrl,
+      firstName: authData.authDto.firstName,
+      deviceIdentifierID: authData.authDto.deviceIdentifierID,
+      lastName: authData.authDto.lastName,
     };
 
     return preapredUserInfo;

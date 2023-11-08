@@ -18,7 +18,7 @@ export class SocialAuthenticationHelperService {
 
   async verifyGoogleToken(args: {
     authenticationData: AuthenticationData;
-    prepareUserInfoFn: (preparedAuthData: PreparedAuthData) => PreparedUserInfo;
+    prepareUserInfoFn: (authData: AuthenticationData) => PreparedUserInfo;
   }): Promise<PreparedAuthData> {
     const { socialVerifyToken, platform } = args.authenticationData.authDto;
 
@@ -55,16 +55,19 @@ export class SocialAuthenticationHelperService {
         kind: AccountKind.GOOGLE,
         email: payload.email,
         socialUid: payload.sub,
-        userInfo: args.prepareUserInfoFn({
-          ...args.authenticationData.preparedAuthData,
-          userInfo: {
-            ...args.authenticationData.preparedAuthData.userInfo,
-            // override firstName and lastName with the returned data from google
-            firstName: payload.given_name,
-            lastName: payload.family_name,
-          },
-        }),
+        userInfo: args.prepareUserInfoFn(args.authenticationData),
       };
+
+      // TODO override firstName and lastName with the returned data from google
+      // {
+      //   ...args.authenticationData.preparedAuthData,
+      //   userInfo: {
+      //     ...args.authenticationData.preparedAuthData.userInfo,
+      //     // override firstName and lastName with the returned data from google
+      //     firstName: payload.given_name,
+      //     lastName: payload.family_name,
+      //   },
+      // }
 
       return userInfo;
     } catch (_) {
@@ -74,7 +77,7 @@ export class SocialAuthenticationHelperService {
 
   async verifyAppleToken(args: {
     authenticationData: AuthenticationData;
-    prepareUserInfoFn: (preparedAuthData: PreparedAuthData) => PreparedUserInfo;
+    prepareUserInfoFn: (authData: AuthenticationData) => PreparedUserInfo;
   }): Promise<PreparedAuthData> {
     try {
       const { socialVerifyToken } = args.authenticationData.authDto;
@@ -93,9 +96,7 @@ export class SocialAuthenticationHelperService {
         kind: AccountKind.APPLE,
         email: response.email,
         socialUid: response.sub,
-        userInfo: args.prepareUserInfoFn(
-          args.authenticationData.preparedAuthData,
-        ),
+        userInfo: args.prepareUserInfoFn(args.authenticationData),
       };
 
       return userInfo;
