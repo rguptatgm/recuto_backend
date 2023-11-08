@@ -19,13 +19,6 @@ export class UserProtection {
       ...this.getDefaultProtection(),
     };
   }
-
-  static ADMIN(): any {
-    return {
-      ...this.getDefaultProtection(),
-      system: 1,
-    };
-  }
 }
 
 export class UserPopulate {}
@@ -45,6 +38,9 @@ export class User {
 
   @Prop({ type: [UserAccountSchema] })
   accounts: UserAccount[];
+
+  @Prop({ required: false })
+  deviceIdentifierID?: string;
 
   @Prop({ type: SystemSchema, required: false })
   system?: System;

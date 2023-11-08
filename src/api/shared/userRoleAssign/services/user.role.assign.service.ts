@@ -37,8 +37,7 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
     userType: UserType;
     forResource?: string;
   }): Promise<any[] | any> => {
-    //
-    // get aggregation query
+    // build aggregation query
     const query = this.queryService.buildPiplineForGetUserPermissions({
       userID: args.userID,
       forPermissionType: args.permissionType,
@@ -47,9 +46,7 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
       forResource: args.forResource,
     });
 
-    const userPermissions = await this.userRoleAssign.aggregate(query);
-
-    return userPermissions;
+    return await this.userRoleAssign.aggregate(query);
   };
 
   assignUserToResource = async (args: {
@@ -59,7 +56,7 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
     userType: UserType;
     validUntil?: Date;
   }): Promise<any> => {
-    // get role
+    // get role by alias
     const role = await this.roleService.findOne({
       conditions: { alias: args.userRole },
     });
@@ -95,12 +92,12 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
         type: resourceType,
       };
 
-      // assign user field based on user type
-      if (args.userType === UserType.USER) {
-        userRoleAssign.user = new ObjectId(args.userID) as any;
-      } else if (args.userType === UserType.USER) {
-        userRoleAssign.user = new ObjectId(args.userID) as any;
-      }
+      // add user condition to query depending on user type
+      const field = getResourceUserFieldBasedOnUserType({
+        userType: args.userType,
+      });
+
+      userRoleAssign[field] = new ObjectId(args.userID) as any;
 
       return await this.create({ document: userRoleAssign });
     }
@@ -172,17 +169,17 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
       },
       {
         $lookup: {
-          from: 'studios',
+          from: 'projects',
           localField: 'resource',
           foreignField: '_id',
           as: 'resource',
-          // pipeline: [
-          //   {
-          //     $project: UserType.DASHBOARD_USER // TODO
-          //       ? StudioProtection.DASHBOARD()
-          //       : StudioProtection.DEFAULT(),
-          //   },
-          // ],
+          pipeline: [
+            // {
+            //   $project: UserType.DASHBOARD_USER
+            //     ? StudioProtection.DASHBOARD()
+            //     : StudioProtection.DEFAULT(),
+            // },
+          ],
         },
       },
       {
