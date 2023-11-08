@@ -43,6 +43,13 @@ export abstract class GenericAuthenticationService<
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected async afterCreateOnSignUp(args: {
+    userDocument: T;
+    authData: AuthenticationData;
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+  }): Promise<void> {}
+
   async signIn(args: { authData: AuthenticationData }) {
     //Verify user information
     const preparedAuthData = await this.verifyAndGetUserInformationForType({
@@ -98,11 +105,16 @@ export abstract class GenericAuthenticationService<
       // Use the new method to create the user document
       const preparedUserData = await this.prepareUserInfo(preparedAuthData);
 
-      await this.create({
+      const createdUser = await this.create({
         document: {
           ...preparedUserData,
           accounts: [userAccount],
         },
+      });
+
+      await this.afterCreateOnSignUp({
+        authData: args.authData,
+        userDocument: createdUser,
       });
 
       // Sign in new user
