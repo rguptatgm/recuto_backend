@@ -9,6 +9,8 @@ import {
   PreparedUserInfo,
 } from 'src/globals/interfaces/global.interface';
 import { SocialAuthenticationHelperService } from './core/social.authentication.helper.service';
+import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
+import { RoleAlias, UserType } from 'src/globals/enums/global.enum';
 
 @Injectable()
 export class UserAuthenticationService extends GenericAuthenticationService<UserDocument> {
@@ -16,6 +18,7 @@ export class UserAuthenticationService extends GenericAuthenticationService<User
     protected readonly jwtPrepareService: JwtPrepareService<UserDocument>,
     @InjectModel(User.name) readonly model: Model<UserDocument>,
     protected readonly socialAuthHelperService: SocialAuthenticationHelperService,
+    private readonly userRoleAssignService: UserRoleAssignService,
   ) {
     super(jwtPrepareService, model, socialAuthHelperService);
   }
@@ -42,5 +45,17 @@ export class UserAuthenticationService extends GenericAuthenticationService<User
     };
 
     return preapredUserInfo;
+  }
+
+  async afterCreateOnSignUp(args: {
+    userDocument: UserDocument;
+    authData: AuthenticationData;
+  }): Promise<void> {
+    await this.userRoleAssignService.assignUserToResource({
+      userID: args.userDocument._id,
+      userRole: RoleAlias.APP_USER,
+      userType: UserType.USER,
+      resource: args.authData.customData.resource,
+    });
   }
 }

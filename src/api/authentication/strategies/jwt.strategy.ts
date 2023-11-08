@@ -34,17 +34,29 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new BadRequestException('User not found');
     }
 
-    const userPermissions =
+    const globalPermissions =
       await this.userRoleAssignService.getUserPermissionsForAllResources({
-        userID: payload._id,
+        userID: user._id,
         permissionType: PermissionType.APP_SERVER,
-        membership: RoleMmbership.USER,
         userType: UserType.USER,
       });
 
+    const projectMembershipPermissions = [];
+    const userMembershipPermissions = [];
+
+    // filter permissions for membership type and assign to respective array
+    globalPermissions.forEach((permission) => {
+      if (permission.membership == RoleMmbership.STUDIO) {
+        projectMembershipPermissions.push(permission);
+      } else if (permission.membership == RoleMmbership.USER) {
+        userMembershipPermissions.push(permission);
+      }
+    });
+
     return {
       ...user,
-      permissions: userPermissions,
+      permissions: userMembershipPermissions,
+      projectPermissions: projectMembershipPermissions,
     } as RequestUser;
   }
 }

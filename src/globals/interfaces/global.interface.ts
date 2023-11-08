@@ -1,5 +1,5 @@
 import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
-import { LanguageCode, RoleMmbership } from '../enums/global.enum';
+import { LanguageCode, RoleMmbership, UserType } from '../enums/global.enum';
 import { AccountKind } from '../enums/global.enum';
 
 export interface RequestUser {
@@ -23,7 +23,7 @@ export interface RequestUser {
   resource: string;
   tokenType: string;
   permissions: ResourcePermission[];
-  studioPermissions?: ResourcePermission[];
+  projectPermissions?: ResourcePermission[];
 }
 
 export interface ResourcePermission {
@@ -31,7 +31,7 @@ export interface ResourcePermission {
   validUntil: Date;
   validFrom: Date;
   resource: string;
-  resourceType: string;
+  resourceType: UserType;
   roleAlias: string;
   permissions: string[];
   membership: RoleMmbership;

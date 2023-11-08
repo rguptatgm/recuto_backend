@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -12,6 +12,8 @@ import { UserRoleAssignModule } from './api/shared/userRoleAssign/user.role.assi
 import { ProjectnModule } from './api/project/project.module';
 import { GlobalsModule } from './globals/globals.module';
 import { AuthenticationModule } from './api/authentication/authentication.module';
+import { RolePermissionGeneratorService } from './data.generators/role.permission.generator.service';
+import { DataGeneratorModule } from './data.generators/data.generator.module';
 
 @Module({
   imports: [
@@ -39,8 +41,19 @@ import { AuthenticationModule } from './api/authentication/authentication.module
     RoleModule,
     ProjectnModule,
     GlobalsModule,
+    DataGeneratorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  constructor(
+    private readonly rolePermissionGeneratorService: RolePermissionGeneratorService,
+  ) {}
+  async onModuleInit() {
+    console.log('\n');
+    console.log('Generator Services:');
+    await this.rolePermissionGeneratorService.createDefaultRoleAndPermissions();
+    console.log('\n');
+  }
+}

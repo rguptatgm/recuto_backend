@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import {
-  ResourceType,
   RoleAlias,
   RoleMmbership,
   UserType,
@@ -77,19 +76,13 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
     if (!resourceExists) {
       // set resource type based on user type
 
-      let resourceType;
-
-      if (args.userType === UserType.USER) {
-        resourceType = ResourceType.DEFAULT;
-      } // TODO else if (...)
-
       const userRoleAssign: UserRoleAssign = {
         resource: new ObjectId(args.resource) as any,
         role: new ObjectId(role._id) as any,
         validFrom: new Date(),
         validUntil: !args.validUntil ? new Date('2222') : args.validUntil,
         membership: RoleMmbership.USER,
-        type: resourceType,
+        type: args.userType,
       };
 
       // add user condition to query depending on user type

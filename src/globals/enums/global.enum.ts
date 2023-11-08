@@ -15,6 +15,7 @@ export enum AccountKind {
 
 export enum RoleAlias {
   APP_USER = 'APP_USER',
+  EXAMPLE_PLAN = 'EXAMPLE_PLAN',
   // ...
 }
 
@@ -26,10 +27,6 @@ export enum RoleMmbership {
 
 export enum UserType {
   USER = 'USER',
-}
-
-export enum ResourceType {
-  DEFAULT = 'DEFAULT',
 }
 
 export enum TokenType {

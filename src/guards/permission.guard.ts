@@ -36,20 +36,19 @@ export const PermissionGuard = (
 
       reqUser.resource = resource;
 
-      // TODO studio permissions !!
-      if (reqUser.studioPermissions != null) {
+      if (reqUser.projectPermissions != null) {
         // filter all permissions with resource id matching the requested resource
-        const studioPermissions = reqUser.studioPermissions.filter((obj) => {
+        const projectPermissions = reqUser.projectPermissions.filter((obj) => {
           return obj.resource.toString() === reqUser.resource.toString();
         });
 
-        if (!studioPermissions || studioPermissions?.length == 0) {
+        if (!projectPermissions || projectPermissions?.length == 0) {
           throw new ForbiddenException();
         }
 
         // check if the studio has the required permission
         const access = checkIfRequiredPermissionExists({
-          resourcePermissions: studioPermissions,
+          resourcePermissions: projectPermissions,
           requiredPermission: requiredPermissions[0],
         });
 

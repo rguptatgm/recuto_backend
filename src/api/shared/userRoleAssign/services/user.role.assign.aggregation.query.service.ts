@@ -18,18 +18,17 @@ export class UserRoleAssignAggregationQueryService {
     //
     let query: any[] = [];
 
-    // The seperate querys are needed because if the membership is STUDIO, then the user will be null
+    // The seperate querys are needed because if the membership is PLAN based, then the user will be null
     // And if no membership is provided, both types will be queried and this can only be done with the $or operator
     const roleUserQuery = [];
     const roleMembershipQuery = [];
-    let resourceType;
 
     // add user condition to query depending on user type
     const field = getResourceUserFieldBasedOnUserType({
       userType: args.userType,
     });
 
-    query.push({ [field]: new ObjectId(args.userID) });
+    roleUserQuery.push({ [field]: new ObjectId(args.userID) });
     roleMembershipQuery.push({ [field]: null });
 
     // if a specific resource is provided, add resource condition to query
@@ -101,7 +100,7 @@ export class UserRoleAssignAggregationQueryService {
     if (!args.forPermissionType) {
       query = [
         {
-          $match: { type: resourceType },
+          $match: { type: args.userType },
         },
         {
           $match: { ...userRoleAssignQuery },
@@ -150,7 +149,7 @@ export class UserRoleAssignAggregationQueryService {
     } else {
       query = [
         {
-          $match: { type: resourceType },
+          $match: { type: args.userType },
         },
 
         {

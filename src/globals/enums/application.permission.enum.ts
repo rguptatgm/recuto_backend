@@ -43,10 +43,10 @@ export const userClientPermission = [ClientPermission.USER_PROFILE_MENU];
 
 //! ================= PLANS - ROLES / PERMISSIONS ASSIGNMENT  =================
 
-export const examplePlanClientPermission = [ClientPermission.USER_PROFILE_MENU];
-
 export const examplePlanServerPermission = [
   ServerPermission.GET_USER_ME,
   ServerPermission.UPDATE_USER_ME,
   ServerPermission.GET_CLIENT_PERMISSIONS,
 ];
+
+export const examplePlanClientPermission = [ClientPermission.USER_PROFILE_MENU];

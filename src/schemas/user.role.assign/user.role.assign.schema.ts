@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { System, SystemSchema } from '../system.schema';
-import { ResourceType, RoleMmbership } from 'src/globals/enums/global.enum';
+import { RoleMmbership, UserType } from 'src/globals/enums/global.enum';
 import { Role } from '../role/role.schema';
 import { User } from '../user/user.schema';
 import { Project, ProjectProtection } from '../project/project.schema';
@@ -90,8 +90,8 @@ export class UserRoleAssign {
   @Prop({ enum: RoleMmbership, default: RoleMmbership.USER })
   membership: RoleMmbership;
 
-  @Prop({ enum: ResourceType, default: ResourceType.DEFAULT })
-  type: ResourceType;
+  @Prop({ enum: UserType, default: UserType.USER })
+  type: UserType;
 
   @Prop({ type: SystemSchema, required: false })
   system?: System;
