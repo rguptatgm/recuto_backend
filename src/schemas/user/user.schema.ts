@@ -42,6 +42,9 @@ export class User {
   @Prop({ required: false })
   deviceIdentifierID?: string;
 
+  @Prop({ required: false, default: [] })
+  fcmTokens?: string[];
+
   @Prop({ type: SystemSchema, required: false })
   system?: System;
 }

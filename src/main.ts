@@ -14,7 +14,7 @@ async function bootstrap() {
 
   // configure global exeption and validation filters
   app.useGlobalFilters(
-    new FallbackExceptionFilter(),
+    // new FallbackExceptionFilter(),
     // new HttpExceptionFilter(app.get(SentryService)), // TODO @tobias configure sentry
     new ValidationExceptionFilter(),
   );

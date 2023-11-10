@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Put,
+  Req,
+  UseGuards,
+  Post,
+  Delete,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -12,6 +21,7 @@ import { UserService } from '../services/user.service';
 import { UserProtection } from 'src/schemas/user/user.schema';
 import { UpdateUserDto } from 'src/dtos/user/update.user.dto';
 import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
+import { FcmTokenDto } from 'src/dtos/general/fcm.token.dto';
 
 // documentation
 @ApiTags('users')
@@ -61,6 +71,50 @@ export class UserController {
       conditions: { _id: req['user']._id },
       changes: updateUserDto,
       projection: UserProtection.DEFAULT(),
+    });
+  }
+
+  //! REGISTER FCM TOKEN
+
+  // documentation
+  @ApiCreatedResponse({ description: 'Successfully added.' })
+  @ApiBadRequestResponse({ description: 'Validation failed.' })
+  @ApiForbiddenResponse({ description: 'Forbidden resource.' })
+  @ApiOperation({
+    summary: 'Add fcm token to logged in user.',
+  })
+  //
+  //
+  @Post('/me/fcm-token')
+  async addFcmToken(
+    @Req() req: Request,
+    @Body() body: FcmTokenDto,
+  ): Promise<any> {
+    return await this.userService.addFcmToken({
+      user: req['user'],
+      fcmToken: body.fcmToken,
+    });
+  }
+
+  //! UNREGISTER FCM TOKEN
+
+  // documentation
+  @ApiCreatedResponse({ description: 'Successfully removed.' })
+  @ApiBadRequestResponse({ description: 'Validation failed.' })
+  @ApiForbiddenResponse({ description: 'Forbidden resource.' })
+  @ApiOperation({
+    summary: 'Remove fcm token from logged in user.',
+  })
+  //
+  //
+  @Delete('/me/fcm-token')
+  async removeFcmToken(
+    @Req() req: Request,
+    @Body() body: FcmTokenDto,
+  ): Promise<any> {
+    return await this.userService.removeFcmToken({
+      user: req['user'],
+      fcmToken: body.fcmToken,
     });
   }
 }
