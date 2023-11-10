@@ -10,11 +10,16 @@ import { JwtPrepareService } from '../services/core/generic.jwt.prepare.service'
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
 import { TokenType, UserType } from 'src/globals/enums/global.enum';
 import { JwtRefreshAuthenticationGuard } from 'src/guards/jwt.refresh.authentication.guard';
-import { PermissionType } from 'src/globals/enums/application.permission.enum';
+import {
+  PermissionType,
+  ServerPermission,
+} from 'src/globals/enums/application.permission.enum';
 import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
 import RefreshTokenDto from 'src/dtos/authentication/refresh.token.dto';
 import { UserDocument } from 'src/schemas/user/user.schema';
 import { UserAuthenticationService } from '../services/user.authentication.service';
+import { PermissionGuard } from 'src/guards/permission.guard';
+import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
 
 // documentation
 @ApiTags('authentication')
@@ -120,10 +125,10 @@ export class AuthenticationController {
   })
   //
   //
-  // @UseGuards(
-  //   JwtRefreshAuthenticationGuard,
-  //   PermissionGuard([ServerPermission.GET_CLIENT_PERMISSIONS]), // TODO add permission guard
-  // )
+  @UseGuards(
+    JwtAuthenticationGuard,
+    PermissionGuard([ServerPermission.GET_PROJECTS]),
+  )
   @Get('/client-permissions')
   async getClientPermissions(@Req() req: Request) {
     if (req['user'].resource == null || req['user']._id == null) {

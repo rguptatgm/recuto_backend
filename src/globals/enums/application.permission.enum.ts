@@ -22,9 +22,8 @@ export enum PermissionType {
 //! ================= PERMISSIONS DEFINITION =================
 
 export enum ServerPermission {
-  GET_USER_ME = 'GET_USER_ME',
-  UPDATE_USER_ME = 'UPDATE_USER_ME',
-  GET_CLIENT_PERMISSIONS = 'GET_CLIENT_PERMISSIONS',
+  GET_PROJECTS = 'GET_PROJECTS',
+  UPDATE_CURRENT_PROJECT = 'UPDATE_CURRENT_PROJECT',
 }
 
 export enum ClientPermission {
@@ -34,9 +33,8 @@ export enum ClientPermission {
 //! ================= USERS - ROLES / PERMISSIONS ASSIGNMENT =================
 
 export const userServerPermission = [
-  ServerPermission.GET_USER_ME,
-  ServerPermission.UPDATE_USER_ME,
-  ServerPermission.GET_CLIENT_PERMISSIONS,
+  ServerPermission.GET_PROJECTS,
+  ServerPermission.UPDATE_CURRENT_PROJECT,
 ];
 
 export const userClientPermission = [ClientPermission.USER_PROFILE_MENU];
@@ -44,9 +42,8 @@ export const userClientPermission = [ClientPermission.USER_PROFILE_MENU];
 //! ================= PLANS - ROLES / PERMISSIONS ASSIGNMENT  =================
 
 export const examplePlanServerPermission = [
-  ServerPermission.GET_USER_ME,
-  ServerPermission.UPDATE_USER_ME,
-  ServerPermission.GET_CLIENT_PERMISSIONS,
+  ServerPermission.GET_PROJECTS,
+  ServerPermission.UPDATE_CURRENT_PROJECT,
 ];
 
 export const examplePlanClientPermission = [ClientPermission.USER_PROFILE_MENU];
