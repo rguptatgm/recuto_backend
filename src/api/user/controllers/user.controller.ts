@@ -12,8 +12,6 @@ import { UserService } from '../services/user.service';
 import { UserProtection } from 'src/schemas/user/user.schema';
 import { UpdateUserDto } from 'src/dtos/user/update.user.dto';
 import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
-import { PermissionGuard } from 'src/guards/permission.guard';
-import { ServerPermission } from 'src/globals/enums/application.permission.enum';
 
 // documentation
 @ApiTags('users')
@@ -34,13 +32,11 @@ export class UserController {
   })
   //
   //
-  @UseGuards(PermissionGuard([ServerPermission.GET_USER_ME]))
   @Get('/me')
   async getUser(@Req() req: Request): Promise<any> {
     return await this.userService.findOne({
       conditions: { _id: req['user']._id },
       projection: UserProtection.DEFAULT(),
-      // populate: UserPopulate.DEFAULT(),
       options: {},
     });
   }
@@ -57,13 +53,14 @@ export class UserController {
   //
   //
   @Put('/me')
-  async updateUserMe(@Body() updateUserDto: UpdateUserDto): Promise<any> {
+  async updateUserMe(
+    @Body() updateUserDto: UpdateUserDto,
+    @Req() req: Request,
+  ): Promise<any> {
     return await this.userService.updateOne({
-      conditions: { email: 'test@test.at' },
+      conditions: { _id: req['user']._id },
       changes: updateUserDto,
       projection: UserProtection.DEFAULT(),
-      // populate: UserPopulate.DEFAULT(),
-      options: {},
     });
   }
 }
