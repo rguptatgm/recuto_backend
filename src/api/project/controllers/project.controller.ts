@@ -34,7 +34,7 @@ export class ProjectController {
   })
   //
   //
-  @Get('/me')
+  @Get()
   async getProjects(@Req() req: Request): Promise<any> {
     return await this.userRoleAssignService.getProjectsForUser({
       user: req['user'],
