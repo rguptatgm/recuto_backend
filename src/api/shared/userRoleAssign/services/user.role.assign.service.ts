@@ -36,8 +36,6 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
     userType: UserType;
     forResource?: string;
   }): Promise<any[] | any> => {
-    console.log('args: ', args);
-
     // build aggregation query
     const query = this.queryService.buildPiplineForGetUserPermissions({
       userID: args.userID,

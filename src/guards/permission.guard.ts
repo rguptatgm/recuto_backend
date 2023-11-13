@@ -69,7 +69,6 @@ export class PermissionGuard implements CanActivate {
       });
 
     if (!ignoreResource && resource != null) {
-      console.log('hasProjectAndUserPermissionForResource');
       // check if user and project has the required permission
       return hasProjectAndUserPermissionForResource({
         user: reqUser,
@@ -77,7 +76,6 @@ export class PermissionGuard implements CanActivate {
         resourcePermissions: permissions,
       });
     } else {
-      console.log('hasUserPermissionForNoneResoruce');
       // check if user has the required permission
       return hasUserPermissionForNoneResoruce({
         user: reqUser,

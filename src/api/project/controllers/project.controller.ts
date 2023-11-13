@@ -43,7 +43,6 @@ export class ProjectController {
   @Permissions(ServerPermission.GET_PROJECTS, true)
   @Get()
   async getProjects(@Req() req: Request): Promise<any> {
-    console.log('getProjects');
     return await this.userRoleAssignService.getProjectsForUser({
       user: req['user'],
       userType: UserType.USER,
