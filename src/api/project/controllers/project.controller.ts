@@ -15,6 +15,7 @@ import { UserType } from 'src/globals/enums/global.enum';
 import { PermissionGuard } from 'src/guards/permission.guard';
 import { ServerPermission } from 'src/globals/enums/application.permission.enum';
 import UpdateProjectDto from 'src/dtos/project/update.project.dto';
+import { Permissions } from 'src/guards/permission.guard';
 
 // documentation
 @ApiTags('projects')
@@ -28,7 +29,7 @@ export class ProjectController {
     private readonly userRoleAssignService: UserRoleAssignService,
   ) {}
 
-  //! GET PROJECTS / ME
+  //! GET PROJECTS
 
   // documentation
   @ApiCreatedResponse({ description: 'Resource successfully returned.' })
@@ -38,9 +39,11 @@ export class ProjectController {
   })
   //
   //
-  // @UseGuards(PermissionGuard([ServerPermission.GET_PROJECTS]))
+  @UseGuards(PermissionGuard)
+  @Permissions(ServerPermission.GET_PROJECTS, true)
   @Get()
   async getProjects(@Req() req: Request): Promise<any> {
+    console.log('getProjects');
     return await this.userRoleAssignService.getProjectsForUser({
       user: req['user'],
       userType: UserType.USER,
@@ -58,7 +61,8 @@ export class ProjectController {
   })
   //
   //
-  @UseGuards(PermissionGuard([ServerPermission.UPDATE_CURRENT_PROJECT]))
+  @UseGuards(PermissionGuard)
+  @Permissions(ServerPermission.UPDATE_CURRENT_PROJECT)
   @Put()
   async updateStudio(
     @Body() updateProjectDto: UpdateProjectDto,

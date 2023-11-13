@@ -4,10 +4,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
 import { UserService } from 'src/api/user/services/user.service';
-import { PermissionType } from 'src/globals/enums/application.permission.enum';
-import { RoleMmbership, UserType } from 'src/globals/enums/global.enum';
-import { RequestUser } from 'src/globals/interfaces/global.interface';
-import { UserProtection } from 'src/schemas/user/user.schema';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -33,29 +29,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new BadRequestException('User not found');
     }
 
-    const globalPermissions =
-      await this.userRoleAssignService.getUserPermissionsForAllResources({
-        userID: user._id,
-        permissionType: PermissionType.APP_SERVER,
-        userType: UserType.USER,
-      });
-
-    const projectMembershipPermissions = [];
-    const userMembershipPermissions = [];
-
-    // filter permissions for membership type and assign to respective array
-    globalPermissions.forEach((permission) => {
-      if (permission.membership == RoleMmbership.STUDIO) {
-        projectMembershipPermissions.push(permission);
-      } else if (permission.membership == RoleMmbership.USER) {
-        userMembershipPermissions.push(permission);
-      }
-    });
-
     return {
       ...user,
-      permissions: userMembershipPermissions,
-      projectPermissions: projectMembershipPermissions,
-    } as RequestUser;
+    };
   }
 }

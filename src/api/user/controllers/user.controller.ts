@@ -22,6 +22,8 @@ import { UserProtection } from 'src/schemas/user/user.schema';
 import { UpdateUserDto } from 'src/dtos/user/update.user.dto';
 import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
 import { FcmTokenDto } from 'src/dtos/general/fcm.token.dto';
+import { Permissions, PermissionGuard } from 'src/guards/permission.guard';
+import { ServerPermission } from 'src/globals/enums/application.permission.enum';
 
 // documentation
 @ApiTags('users')
@@ -42,6 +44,8 @@ export class UserController {
   })
   //
   //
+  @UseGuards(PermissionGuard)
+  @Permissions(ServerPermission.GET_USER_ME, true)
   @Get('/me')
   async getUser(@Req() req: Request): Promise<any> {
     return await this.userService.findOne({
@@ -62,6 +66,8 @@ export class UserController {
   })
   //
   //
+  @UseGuards(PermissionGuard)
+  @Permissions(ServerPermission.UPDATE_USER_ME, true)
   @Put('/me')
   async updateUserMe(
     @Body() updateUserDto: UpdateUserDto,

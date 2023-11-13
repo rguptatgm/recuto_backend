@@ -7,6 +7,7 @@ import {
   examplePlanServerPermission,
   userClientPermission,
   userServerPermission,
+  userServerPermissionNoneResource,
 } from 'src/globals/enums/application.permission.enum';
 import { RoleAlias } from 'src/globals/enums/global.enum';
 
@@ -42,6 +43,14 @@ export class RolePermissionGeneratorService {
       type: PermissionType.APP_CLIENT,
       roleAlias: RoleAlias.APP_USER,
       title: 'App User',
+    });
+
+    //! USER WITH NONE RESOURCE
+    await this.createRoleAndPermission({
+      permission: userServerPermissionNoneResource,
+      type: PermissionType.APP_SERVER,
+      roleAlias: RoleAlias.APP_USER_NONE_RESOURCE,
+      title: 'App User None Resource',
     });
 
     //! BASIC PLAN

@@ -1,85 +1,89 @@
 import {
-  BadRequestException,
+  Injectable,
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
-  Injectable,
-  mixin,
+  SetMetadata,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ServerPermission } from 'src/globals/enums/application.permission.enum';
-import { checkIfRequiredPermissionExists } from 'src/globals/helper/permission.helper';
+import { Reflector } from '@nestjs/core';
+import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
+import {
+  PermissionType,
+  ServerPermission,
+} from 'src/globals/enums/application.permission.enum';
+import { RoleMmbership, UserType } from 'src/globals/enums/global.enum';
+import {
+  hasProjectAndUserPermissionForResource,
+  hasUserPermissionForNoneResoruce,
+} from 'src/globals/helper/permission.helper';
 import { RequestUser } from 'src/globals/interfaces/global.interface';
 
-export const PermissionGuard = (
-  requiredPermissions: ServerPermission[],
-): any => {
-  @Injectable()
-  class RoleGuardMixin implements CanActivate {
-    constructor(private readonly configService: ConfigService) {}
+export const Permissions = (
+  permission: ServerPermission,
+  ignoreResource?: boolean,
+) => SetMetadata('permissions', { permission, ignoreResource });
 
-    canActivate(context: ExecutionContext) {
-      const { user } = context.switchToHttp().getRequest();
+@Injectable()
+export class PermissionGuard implements CanActivate {
+  constructor(
+    private reflector: Reflector,
+    private readonly userRoleAssignService: UserRoleAssignService,
+  ) {}
 
-      const reqUser = user as RequestUser;
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // get user and resource from request
+    const { user } = context.switchToHttp().getRequest();
+    const reqUser = user as RequestUser;
+    const { resource } = context.switchToHttp().getRequest().headers;
 
-      if (!reqUser) {
-        throw new BadRequestException();
-      }
+    // get permission and ignoreResource from permission decorator
+    const permissionDecoratorData = this.reflector.get<{
+      permission: ServerPermission;
+      ignoreResource: boolean;
+    }>('permissions', context.getHandler());
 
-      // get resource from header
-      const { resource } = context.switchToHttp().getRequest().headers;
+    // check permission decorator is applied
+    if (permissionDecoratorData == null) {
+      return false;
+    }
 
-      if (!resource) {
-        throw new BadRequestException('invalid request');
-      }
+    const { permission, ignoreResource = false } = permissionDecoratorData;
 
-      reqUser.resource = resource;
+    // check if permission and user exist
+    if (permission == null || reqUser == null) {
+      return false;
+    }
 
-      if (reqUser.projectPermissions != null) {
-        // filter all permissions with resource id matching the requested resource
-        const projectPermissions = reqUser.projectPermissions.filter((obj) => {
-          return obj.resource.toString() === reqUser.resource.toString();
-        });
+    // check when resource is required but not provided in request
+    if (!ignoreResource && resource == null) {
+      return false;
+    }
 
-        if (!projectPermissions || projectPermissions?.length == 0) {
-          throw new ForbiddenException();
-        }
-
-        // check if the studio has the required permission
-        const access = checkIfRequiredPermissionExists({
-          resourcePermissions: projectPermissions,
-          requiredPermission: requiredPermissions[0],
-        });
-
-        if (!access) {
-          return false;
-        }
-      }
-
-      // filter all userpermissions with resource id matching the requested resource
-      const userPermissions = reqUser.permissions.filter((obj) => {
-        return obj.resource.toString() === reqUser.resource.toString();
+    // get all permissions for the user
+    const permissions =
+      await this.userRoleAssignService.getUserPermissionsForAllResources({
+        userID: user._id,
+        permissionType: PermissionType.APP_SERVER,
+        userType: UserType.USER,
+        forResource: ignoreResource ? null : resource,
+        membership: !ignoreResource ? null : RoleMmbership.NONE_RESOURCE,
       });
 
-      if (!userPermissions || userPermissions?.length == 0) {
-        throw new ForbiddenException();
-      }
-
-      // check if the user has the required permission
-      const access = checkIfRequiredPermissionExists({
-        resourcePermissions: userPermissions,
-        requiredPermission: requiredPermissions[0],
+    if (!ignoreResource && resource != null) {
+      console.log('hasProjectAndUserPermissionForResource');
+      // check if user and project has the required permission
+      return hasProjectAndUserPermissionForResource({
+        user: reqUser,
+        permission: permission,
+        resourcePermissions: permissions,
       });
-
-      if (access == null) {
-        return false;
-      }
-
-      return access;
+    } else {
+      console.log('hasUserPermissionForNoneResoruce');
+      // check if user has the required permission
+      return hasUserPermissionForNoneResoruce({
+        user: reqUser,
+        permission: permission,
+        resourcePermissions: permissions,
+      });
     }
   }
-
-  const guard = mixin(RoleGuardMixin);
-  return guard;
-};
+}

@@ -18,7 +18,7 @@ import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
 import RefreshTokenDto from 'src/dtos/authentication/refresh.token.dto';
 import { UserDocument } from 'src/schemas/user/user.schema';
 import { UserAuthenticationService } from '../services/user.authentication.service';
-import { PermissionGuard } from 'src/guards/permission.guard';
+import { PermissionGuard, Permissions } from 'src/guards/permission.guard';
 import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
 
 // documentation
@@ -125,10 +125,8 @@ export class AuthenticationController {
   })
   //
   //
-  @UseGuards(
-    JwtAuthenticationGuard,
-    PermissionGuard([ServerPermission.GET_PROJECTS]),
-  )
+  @UseGuards(JwtAuthenticationGuard, PermissionGuard)
+  @Permissions(ServerPermission.GET_CLIENT_PERMISSIONS) // TODO what should i do here? Own endpoint for NONE_RESOURCE permissions?
   @Get('/client-permissions')
   async getClientPermissions(@Req() req: Request) {
     if (req['user'].resource == null || req['user']._id == null) {

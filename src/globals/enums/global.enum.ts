@@ -15,6 +15,7 @@ export enum AccountKind {
 
 export enum RoleAlias {
   APP_USER = 'APP_USER',
+  APP_USER_NONE_RESOURCE = 'APP_USER_NONE_RESOURCE',
   EXAMPLE_PLAN = 'EXAMPLE_PLAN',
   // ...
 }
@@ -22,7 +23,8 @@ export enum RoleAlias {
 // for the distinction between user and project rights in the user role assign collection
 export enum RoleMmbership {
   USER = 'USER',
-  STUDIO = 'STUDIO',
+  PROJECT = 'PROJECT',
+  NONE_RESOURCE = 'NONE_RESOURCE',
 }
 
 export enum UserType {

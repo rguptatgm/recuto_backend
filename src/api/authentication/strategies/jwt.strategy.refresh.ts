@@ -2,10 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
 import { UserService } from 'src/api/user/services/user.service';
-import { PermissionType } from 'src/globals/enums/application.permission.enum';
-import { UserType } from 'src/globals/enums/global.enum';
 import { UserProtection } from 'src/schemas/user/user.schema';
 
 @Injectable()
@@ -16,7 +13,6 @@ export class JwtStrategyRefresh extends PassportStrategy(
   constructor(
     private readonly configService: ConfigService,
     private readonly userService: UserService,
-    private readonly userRoleAssignService: UserRoleAssignService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromBodyField('refresh_token'),
@@ -36,16 +32,8 @@ export class JwtStrategyRefresh extends PassportStrategy(
       throw new BadRequestException('User not found');
     }
 
-    const userPermissions =
-      await this.userRoleAssignService.getUserPermissionsForAllResources({
-        userID: payload._id,
-        permissionType: PermissionType.APP_SERVER,
-        userType: UserType.USER,
-      });
-
     return {
       ...user,
-      permissions: userPermissions,
     };
   }
 }
