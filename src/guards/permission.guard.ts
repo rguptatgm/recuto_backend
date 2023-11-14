@@ -3,6 +3,7 @@ import {
   CanActivate,
   ExecutionContext,
   SetMetadata,
+  BadRequestException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
@@ -55,7 +56,7 @@ export class PermissionGuard implements CanActivate {
 
     // check when resource is required but not provided in request
     if (!ignoreResource && resource == null) {
-      return false;
+      throw new BadRequestException('Resource is not provided in request');
     }
 
     // get all permissions for the user
