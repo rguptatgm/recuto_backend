@@ -40,8 +40,8 @@ async function bootstrap() {
 
   // init swagger documentation
   const config = new DocumentBuilder()
-    .setTitle('Booklin REST API Documentation')
-    .setDescription('Booklin rest API documentation routes overview')
+    .setTitle('NestJs Template REST API Documentation')
+    .setDescription('NestJs Template REST API documentation')
     .setVersion('1.0')
     .setBasePath('docs')
     .addBearerAuth(

@@ -27,6 +27,7 @@ export enum ServerPermission {
   UPDATE_USER_ME = 'UPDATE_USER_ME',
   GET_PROJECTS = 'GET_PROJECTS',
   GET_CLIENT_PERMISSIONS = 'GET_CLIENT_PERMISSIONS',
+  DASHBOARD_CHANGE_USER_PASSWORD = 'DASHBOARD_CHANGE_USER_PASSWORD',
 }
 
 export enum ClientPermission {
@@ -44,6 +45,7 @@ export const userServerPermissionNoneResource = [
   ServerPermission.GET_USER_ME,
   ServerPermission.UPDATE_USER_ME,
   ServerPermission.GET_PROJECTS,
+  ServerPermission.DASHBOARD_CHANGE_USER_PASSWORD,
 ];
 
 export const userClientPermission = [ClientPermission.USER_PROFILE_MENU];

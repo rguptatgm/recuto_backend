@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiOperation,
@@ -10,12 +11,17 @@ import { JwtPrepareService } from '../services/core/generic.jwt.prepare.service'
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
 import { TokenType, UserType } from 'src/globals/enums/global.enum';
 import { JwtRefreshAuthenticationGuard } from 'src/guards/jwt.refresh.authentication.guard';
-import { PermissionType } from 'src/globals/enums/application.permission.enum';
+import {
+  PermissionType,
+  ServerPermission,
+} from 'src/globals/enums/application.permission.enum';
 import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
 import RefreshTokenDto from 'src/dtos/authentication/refresh.token.dto';
 import { UserDocument } from 'src/schemas/user/user.schema';
 import { UserAuthenticationService } from '../services/user.authentication.service';
 import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
+import { PermissionGuard, Permissions } from 'src/guards/permission.guard';
+import ChangePasswordDto from 'src/dtos/authentication/change.password.dto';
 
 // documentation
 @ApiTags('authentication')
@@ -70,6 +76,31 @@ export class UserAuthenticationController {
       },
     });
     return result;
+  }
+
+  //! CHANGE PASSWORD
+
+  // documentation
+  @ApiBearerAuth('JWT')
+  @ApiCreatedResponse({ description: 'Successfull signUp.' })
+  @ApiBadRequestResponse({ description: 'Validation failed.' })
+  @ApiOperation({
+    summary: 'Change password for requested user.',
+  })
+  //
+  //
+  @UseGuards(JwtAuthenticationGuard, PermissionGuard)
+  @Permissions(ServerPermission.DASHBOARD_CHANGE_USER_PASSWORD, true)
+  @Post('/change-password')
+  async changeUserPassword(
+    @Body() changePasswordDto: ChangePasswordDto,
+    @Req() req: Request,
+  ): Promise<any> {
+    return await this.userAuthenticationService.handleChangePassword({
+      newPassword: changePasswordDto.newPassword,
+      password: changePasswordDto.password,
+      reqUser: req['user'],
+    });
   }
 
   //! REFRESH-TOKEN

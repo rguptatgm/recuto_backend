@@ -7,6 +7,7 @@ import {
   AuthenticationData,
   PreparedAuthData,
   PreparedUserInfo,
+  RequestUser,
 } from 'src/globals/interfaces/global.interface';
 import {
   checkIfPasswordIsValid,
@@ -279,6 +280,56 @@ export abstract class GenericAuthenticationService<
     });
 
     return user;
+  }
+
+  async handleChangePassword(args: {
+    password: string;
+    newPassword: string;
+    reqUser: RequestUser;
+  }): Promise<void> {
+    // get internal account for password validation
+    const user = await this.findOne({
+      conditions: { _id: args.reqUser._id } as any,
+    });
+
+    // find the account item from user with type internal
+    const internalAccount = user.accounts.find(
+      (account) => account.kind === AccountKind.INTERNAL,
+    );
+
+    if (!internalAccount || !internalAccount.password || !internalAccount._id) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    // check if password matches
+    const valid = await checkIfPasswordIsValid({
+      storedPassword: internalAccount.password,
+      reqPassword: args.password,
+    });
+
+    if (!valid) {
+      throw new BadRequestException('Invalid credentials');
+    }
+
+    // hash new password
+    const hashedPassword = await hashPassword(args.newPassword);
+
+    // find the account with type internal and update with new password
+    await this.updateOne({
+      conditions: {
+        _id: args.reqUser._id,
+        accounts: {
+          $elemMatch: {
+            _id: internalAccount._id,
+          },
+        },
+      } as any,
+      changes: {
+        $set: {
+          'accounts.$.password': hashedPassword,
+        },
+      },
+    });
   }
 
   private async prepareAccountForKind(args: {
