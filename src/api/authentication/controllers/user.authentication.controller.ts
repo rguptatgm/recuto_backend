@@ -15,6 +15,7 @@ import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
 import RefreshTokenDto from 'src/dtos/authentication/refresh.token.dto';
 import { UserDocument } from 'src/schemas/user/user.schema';
 import { UserAuthenticationService } from '../services/user.authentication.service';
+import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
 
 // documentation
 @ApiTags('authentication')
@@ -120,6 +121,7 @@ export class UserAuthenticationController {
   })
   //
   //
+  @UseGuards(JwtAuthenticationGuard)
   @Get('/client-permissions')
   async getClientPermissions(@Req() req: Request) {
     if (req['user'].resource == null || req['user']._id == null) {
