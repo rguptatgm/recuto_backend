@@ -11,6 +11,7 @@ export class UserProtection {
       firstName: 1,
       lastName: 1,
       email: 1,
+      setupCompleted: 1,
     };
   }
 
