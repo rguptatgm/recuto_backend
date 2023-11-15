@@ -45,6 +45,9 @@ export class User {
   @Prop({ required: false, default: [] })
   fcmTokens?: string[];
 
+  @Prop({ default: false })
+  setupCompleted: boolean;
+
   @Prop({ type: SystemSchema, required: false })
   system?: System;
 }
