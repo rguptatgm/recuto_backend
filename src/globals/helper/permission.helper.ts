@@ -45,8 +45,6 @@ export const hasUserPermissionForNoneResoruce = (args: {
     requiredMembership: RoleMmbership.NONE_RESOURCE,
     requiredResource: args.user.resource,
   });
-  console.log(JSON.stringify(args.resourcePermissions, null, 2));
-  console.log('access: ', access);
 
   return access;
 };

@@ -3,11 +3,16 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as basicAuth from 'express-basic-auth';
-import { FallbackExceptionFilter } from './filters/fallback.exception.filter';
 import { ValidationExceptionFilter } from './filters/validation.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
 
   //configure global api prexix https://domain/api/...route
   app.setGlobalPrefix('api');
@@ -51,4 +56,5 @@ async function bootstrap() {
 
   await app.listen(9000);
 }
+
 bootstrap();
