@@ -155,7 +155,7 @@ export class UserAuthenticationController {
   @UseGuards(JwtAuthenticationGuard)
   @Get('/client-permissions')
   async getClientPermissions(@Req() req: Request) {
-    if (req['user'].resource == null || req['user']._id == null) {
+    if (req['user']._id == null) {
       return [];
     }
 
@@ -164,7 +164,7 @@ export class UserAuthenticationController {
         userID: req['user']._id,
         permissionType: PermissionType.APP_CLIENT,
         userType: UserType.USER,
-        forResource: req['user'].resource,
+        forResource: req.headers['resource'],
       });
 
     return userClientPermissions;
