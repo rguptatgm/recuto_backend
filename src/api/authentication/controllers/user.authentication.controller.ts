@@ -10,22 +10,17 @@ import { JwtPrepareService } from '../services/core/generic.jwt.prepare.service'
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
 import { TokenType, UserType } from 'src/globals/enums/global.enum';
 import { JwtRefreshAuthenticationGuard } from 'src/guards/jwt.refresh.authentication.guard';
-import {
-  PermissionType,
-  ServerPermission,
-} from 'src/globals/enums/application.permission.enum';
+import { PermissionType } from 'src/globals/enums/application.permission.enum';
 import AuthenticationDto from 'src/dtos/authentication/authentication.dto';
 import RefreshTokenDto from 'src/dtos/authentication/refresh.token.dto';
 import { UserDocument } from 'src/schemas/user/user.schema';
 import { UserAuthenticationService } from '../services/user.authentication.service';
-import { PermissionGuard, Permissions } from 'src/guards/permission.guard';
-import { JwtAuthenticationGuard } from 'src/guards/jwt.authentication.guard';
 
 // documentation
 @ApiTags('authentication')
 //
 @Controller('auth')
-export class AuthenticationController {
+export class UserAuthenticationController {
   constructor(
     private readonly jwtPrepareService: JwtPrepareService<UserDocument>,
     private readonly userRoleAssignService: UserRoleAssignService,
@@ -125,8 +120,6 @@ export class AuthenticationController {
   })
   //
   //
-  @UseGuards(JwtAuthenticationGuard, PermissionGuard)
-  @Permissions(ServerPermission.GET_CLIENT_PERMISSIONS) // TODO what should i do here? Own endpoint for NONE_RESOURCE permissions?
   @Get('/client-permissions')
   async getClientPermissions(@Req() req: Request) {
     if (req['user'].resource == null || req['user']._id == null) {

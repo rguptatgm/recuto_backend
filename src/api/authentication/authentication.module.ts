@@ -7,7 +7,7 @@ import { JwtPrepareService } from './services/core/generic.jwt.prepare.service';
 import { JwtStrategyRefresh } from './strategies/jwt.strategy.refresh';
 import { SocialAuthenticationHelperService } from './services/core/social.authentication.helper.service';
 import { UserRoleAssignModule } from '../shared/userRoleAssign/user.role.assign.module';
-import { AuthenticationController } from './controllers/authentication.controller';
+import { UserAuthenticationController } from './controllers/user.authentication.controller';
 import { UserAuthenticationService } from './services/user.authentication.service';
 
 @Module({
@@ -22,7 +22,7 @@ import { UserAuthenticationService } from './services/user.authentication.servic
       inject: [ConfigService],
     }),
   ],
-  controllers: [AuthenticationController],
+  controllers: [UserAuthenticationController],
   providers: [
     UserAuthenticationService,
     JwtStrategy,
