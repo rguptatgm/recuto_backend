@@ -12,6 +12,6 @@ import { ProjectController } from './controllers/project.controller';
   ],
   controllers: [ProjectController],
   providers: [ProjectService],
-  exports: [],
+  exports: [ProjectService],
 })
-export class ProjectnModule {}
+export class ProjectModule {}

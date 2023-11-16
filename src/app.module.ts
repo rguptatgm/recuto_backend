@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module, OnModuleInit, Scope } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -9,11 +9,13 @@ import { UserModule } from './api/user/user.module';
 import { PermissionModule } from './api/shared/permission/permission.module';
 import { RoleModule } from './api/shared/role/role.module';
 import { UserRoleAssignModule } from './api/shared/userRoleAssign/user.role.assign.module';
-import { ProjectnModule } from './api/project/project.module';
+import { ProjectModule } from './api/project/project.module';
 import { GlobalsModule } from './globals/globals.module';
 import { AuthenticationModule } from './api/authentication/authentication.module';
 import { RolePermissionGeneratorService } from './data.generators/role.permission.generator.service';
 import { DataGeneratorModule } from './data.generators/data.generator.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ResourceInterceptor } from './interceptors/resource.interceptor';
 
 @Module({
   imports: [
@@ -39,12 +41,19 @@ import { DataGeneratorModule } from './data.generators/data.generator.module';
     UserModule,
     PermissionModule,
     RoleModule,
-    ProjectnModule,
+    ProjectModule,
     GlobalsModule,
     DataGeneratorModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      scope: Scope.REQUEST,
+      useClass: ResourceInterceptor,
+    },
+  ],
 })
 export class AppModule implements OnModuleInit {
   constructor(

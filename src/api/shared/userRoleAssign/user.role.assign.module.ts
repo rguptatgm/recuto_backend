@@ -6,7 +6,7 @@ import { UserRoleAssignService } from './services/user.role.assign.service';
 import { UserRoleAssignSchema } from 'src/schemas/user.role.assign/user.role.assign.schema';
 import { UserModule } from 'src/api/user/user.module';
 
-@Global() // need to be because of the permission guard
+@Global() // need to be global because of the permission guard
 @Module({
   imports: [
     MongooseModule.forFeature([

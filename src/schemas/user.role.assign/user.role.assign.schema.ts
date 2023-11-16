@@ -67,7 +67,7 @@ export class UserRoleAssign {
     type: MongooseSchema.Types.ObjectId,
     ref: 'Project',
   })
-  resource: Project; // TODO describe
+  resource: Project;
 
   @Prop({
     type: MongooseSchema.Types.ObjectId,

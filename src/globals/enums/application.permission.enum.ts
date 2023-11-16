@@ -28,6 +28,11 @@ export enum ServerPermission {
   GET_PROJECTS = 'GET_PROJECTS',
   GET_CLIENT_PERMISSIONS = 'GET_CLIENT_PERMISSIONS',
   DASHBOARD_CHANGE_USER_PASSWORD = 'DASHBOARD_CHANGE_USER_PASSWORD',
+  CREATE_PROJECT_INVITATION = 'CREATE_PROJECT_INVITATION',
+  GET_OPEN_PROJECT_INVITATIONS = 'GET_OPEN_PROJECT_INVITATIONS',
+  DELETE_PROJECT_INVITATION = 'DELETE_PROJECT_INVITATION',
+  ACCEPT_PROJECT_INVITATION = 'ACCEPT_PROJECT_INVITATION',
+  DECLINE_PROJECT_INVITATION = 'DECLINE_PROJECT_INVITATION',
 }
 
 export enum ClientPermission {
@@ -39,6 +44,9 @@ export enum ClientPermission {
 export const userServerPermission = [
   ServerPermission.UPDATE_CURRENT_PROJECT,
   ServerPermission.GET_CLIENT_PERMISSIONS,
+  ServerPermission.CREATE_PROJECT_INVITATION,
+  ServerPermission.GET_OPEN_PROJECT_INVITATIONS,
+  ServerPermission.DELETE_PROJECT_INVITATION,
 ];
 
 export const userServerPermissionNoneResource = [
@@ -46,6 +54,8 @@ export const userServerPermissionNoneResource = [
   ServerPermission.UPDATE_USER_ME,
   ServerPermission.GET_PROJECTS,
   ServerPermission.DASHBOARD_CHANGE_USER_PASSWORD,
+  ServerPermission.ACCEPT_PROJECT_INVITATION,
+  ServerPermission.DECLINE_PROJECT_INVITATION,
 ];
 
 export const userClientPermission = [ClientPermission.USER_PROFILE_MENU];
