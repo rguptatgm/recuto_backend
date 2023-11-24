@@ -24,7 +24,7 @@ export const checkIfRequiredPermissionExists = (args: {
 
       // check if resource match
       const resourceMatch = args.requiredResource
-        ? tokenRole.resource === args.requiredResource
+        ? tokenRole.resource == args.requiredResource
         : true;
 
       return hasPermission && membershipMatch && resourceMatch;
