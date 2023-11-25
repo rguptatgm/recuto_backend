@@ -28,14 +28,14 @@ import {
 import { InvitationService } from '../services/Invitation.service';
 import { ServerPermission } from 'src/globals/enums/application.permission.enum';
 import { PermissionGuard, Permissions } from 'src/guards/permission.guard';
-import { ResourceInterceptor } from 'src/interceptors/resource.interceptor';
+// import { ResourceInterceptor } from 'src/interceptors/resource.interceptor';
 import { UserType } from 'src/globals/enums/global.enum';
 
 // documentation
 @ApiTags('invitations')
 @ApiBearerAuth('JWT')
 //
-@UseInterceptors(ResourceInterceptor)
+// @UseInterceptors(ResourceInterceptor) // TODO fix this
 @UseGuards(JwtAuthenticationGuard)
 @Controller('invitations')
 export class InvitationController {

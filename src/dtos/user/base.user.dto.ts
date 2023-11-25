@@ -16,6 +16,10 @@ export class BaseUserDto {
   @IsOptional()
   @ApiProperty({ type: String })
   email: string;
+
+  @IsOptional()
+  @ApiPropertyOptional({ type: Date })
+  dateOfBirth?: Date;
 }
 
 export default BaseUserDto;

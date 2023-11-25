@@ -22,7 +22,7 @@ export class InvitationService extends GenericCrudService<InvitationDocument> {
     @InjectModel(Invitation.name)
     readonly invitation: Model<InvitationDocument>,
     private readonly roleService: RoleService,
-    private readonly userRoleAssignService: UserRoleAssignService, // private readonly clientNotificationService: ClientNotificationService,
+    private readonly userRoleAssignService: UserRoleAssignService,
   ) {
     super(invitation);
   }
@@ -42,12 +42,7 @@ export class InvitationService extends GenericCrudService<InvitationDocument> {
       throw new BadGatewayException("Invitation doesn't exist.");
     }
 
-    // send invitation accepted email
-    // await this.clientNotificationService.sendInvitationEmail({
-    //   recipient: invitation.email,
-    //   reqUser: args.reqUser,
-    //   studio: args.reqStudio as any,
-    // });
+    // TODO send here the resend invitation email with a notification service
 
     return invitation;
   };
@@ -96,13 +91,7 @@ export class InvitationService extends GenericCrudService<InvitationDocument> {
     });
 
     if (createdInvitation) {
-      // TODO create notification service
-      // send invitation accepted email
-      // await this.clientNotificationService.sendInvitationEmail({
-      //   recipient: args.createInvitationDto.email,
-      //   reqUser: args.reqUser,
-      //   studio: args.reqStudio as any,
-      // });
+      // TODO send here the invitation email with a notification service
     }
 
     return createdInvitation;
@@ -161,7 +150,7 @@ export class InvitationService extends GenericCrudService<InvitationDocument> {
     });
 
     if (!userRoleAssign) {
-      throw new BadGatewayException('User role assign could not be created.'); // TODO check if this error is needed or not
+      throw new BadGatewayException('User role assign could not be created.');
     }
 
     // delete the invitation

@@ -12,12 +12,7 @@ export interface RequestUser {
   lastName?: string;
   firstName?: string;
   dateOfBirth?: Date;
-  gender?: string;
   profileImageUrl?: string;
-  trainingsLevel?: number;
-  bodyHeight?: number;
-  studios?: any[];
-  goals?: any[];
 
   // req properties add from the auth middleware
   resource: string;

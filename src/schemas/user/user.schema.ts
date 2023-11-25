@@ -12,6 +12,7 @@ export class UserProtection {
       lastName: 1,
       email: 1,
       setupCompleted: 1,
+      dateOfBirth: 1,
     };
   }
 
@@ -36,6 +37,9 @@ export class User {
 
   @Prop()
   email: string;
+
+  @Prop({ required: false })
+  dateOfBirth?: Date;
 
   @Prop({ type: [UserAccountSchema] })
   accounts: UserAccount[];

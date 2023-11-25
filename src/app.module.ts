@@ -16,6 +16,7 @@ import { RolePermissionGeneratorService } from './data.generators/role.permissio
 import { DataGeneratorModule } from './data.generators/data.generator.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResourceInterceptor } from './interceptors/resource.interceptor';
+import { InvitationModule } from './api/Invitation/invitation.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { ResourceInterceptor } from './interceptors/resource.interceptor';
     ProjectModule,
     GlobalsModule,
     DataGeneratorModule,
+    InvitationModule,
   ],
   controllers: [AppController],
   providers: [
