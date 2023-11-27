@@ -10,7 +10,11 @@ import {
 } from 'src/globals/interfaces/global.interface';
 import { SocialAuthenticationHelperService } from './core/social.authentication.helper.service';
 import { UserRoleAssignService } from 'src/api/shared/userRoleAssign/services/user.role.assign.service';
-import { RoleAlias, UserType } from 'src/globals/enums/global.enum';
+import {
+  RoleAlias,
+  RoleMmbership,
+  UserType,
+} from 'src/globals/enums/global.enum';
 
 @Injectable()
 export class UserAuthenticationService extends GenericAuthenticationService<UserDocument> {
@@ -51,11 +55,11 @@ export class UserAuthenticationService extends GenericAuthenticationService<User
     userDocument: UserDocument;
     authData: AuthenticationData;
   }): Promise<void> {
-    await this.userRoleAssignService.assignUserToResource({
+    await this.userRoleAssignService.assignUserToRole({
       userID: args.userDocument._id,
-      userRole: RoleAlias.APP_USER,
+      userRole: RoleAlias.APP_USER_NONE_RESOURCE,
+      membership: RoleMmbership.NONE_RESOURCE,
       userType: UserType.USER,
-      resource: args.authData.customData.resource,
     });
   }
 }

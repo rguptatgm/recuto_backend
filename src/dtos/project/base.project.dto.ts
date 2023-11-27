@@ -4,7 +4,7 @@ import { IsString } from 'class-validator';
 class BaseProjectDto {
   @IsString()
   @ApiProperty({ type: String })
-  name?: string;
+  name: string;
 }
 
 export default BaseProjectDto;

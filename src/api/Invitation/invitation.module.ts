@@ -11,7 +11,6 @@ import { InvitationSchema } from 'src/schemas/invitation/invitation.schema';
     MongooseModule.forFeature([
       { name: 'Invitation', schema: InvitationSchema },
     ]),
-    // DashboardUserModule,
     RoleModule,
     UserRoleAssignModule,
     // NotificationModule,

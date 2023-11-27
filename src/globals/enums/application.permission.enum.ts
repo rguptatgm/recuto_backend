@@ -26,6 +26,7 @@ export enum ServerPermission {
   GET_USER_ME = 'GET_USER_ME',
   UPDATE_USER_ME = 'UPDATE_USER_ME',
   GET_PROJECTS = 'GET_PROJECTS',
+  CREATE_PROJECT = 'CREATE_PROJECT',
   GET_CLIENT_PERMISSIONS = 'GET_CLIENT_PERMISSIONS',
   DASHBOARD_CHANGE_USER_PASSWORD = 'DASHBOARD_CHANGE_USER_PASSWORD',
   CREATE_PROJECT_INVITATION = 'CREATE_PROJECT_INVITATION',
@@ -56,15 +57,13 @@ export const userServerPermissionNoneResource = [
   ServerPermission.DASHBOARD_CHANGE_USER_PASSWORD,
   ServerPermission.ACCEPT_PROJECT_INVITATION,
   ServerPermission.DECLINE_PROJECT_INVITATION,
+  ServerPermission.CREATE_PROJECT,
 ];
 
 export const userClientPermission = [ClientPermission.USER_PROFILE_MENU];
 
 //! ================= PLANS - ROLES / PERMISSIONS ASSIGNMENT  =================
 
-export const examplePlanServerPermission = [
-  ServerPermission.GET_PROJECTS,
-  ServerPermission.UPDATE_CURRENT_PROJECT,
-];
+export const examplePlanServerPermission = [...userServerPermission];
 
 export const examplePlanClientPermission = [ClientPermission.USER_PROFILE_MENU];

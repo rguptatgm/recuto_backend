@@ -48,12 +48,53 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
     return await this.userRoleAssign.aggregate(query);
   };
 
-  assignUserToResource = async (args: {
+  assignProjectToPlan = async (args: {
+    resource: string;
+    role: RoleAlias;
+    type: UserType;
+    validUntil?: Date;
+  }): Promise<any> => {
+    // get role by alias
+    const role = await this.roleService.findOne({
+      conditions: { alias: args.role },
+    });
+
+    if (!role) {
+      return;
+    }
+
+    // check if resource is already assigned to the role
+    const resourceExists = await this.checkIfAssignedToResource({
+      resource: args.resource,
+      roleID: role._id,
+      membership: RoleMmbership.PROJECT,
+      userType: args.type != null ? args.type : UserType.USER,
+    });
+
+    // assign user to resource if not exists
+    if (!resourceExists) {
+      // set resource type based on user type
+
+      const userRoleAssign: UserRoleAssign = {
+        role: new ObjectId(role._id) as any,
+        validFrom: new Date(),
+        validUntil: !args.validUntil ? new Date('2222') : args.validUntil,
+        membership: RoleMmbership.PROJECT,
+        type: args.type != null ? args.type : UserType.USER,
+        resource: new ObjectId(args.resource) as any,
+      };
+
+      return await this.create({ document: userRoleAssign });
+    }
+  };
+
+  assignUserToRole = async (args: {
     userRole: RoleAlias;
     userID: string;
-    resource: string;
+    resource?: string;
     userType: UserType;
     validUntil?: Date;
+    membership?: RoleMmbership;
   }): Promise<any> => {
     // get role by alias
     const role = await this.roleService.findOne({
@@ -65,7 +106,7 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
     }
 
     // check if user is already assigned to the resource
-    const resourceExists = await this.checkIfUserIsAssignedToResource({
+    const resourceExists = await this.checkIfAssignedToResource({
       resource: args.resource,
       roleID: role._id,
       userID: args.userID,
@@ -77,13 +118,16 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
       // set resource type based on user type
 
       const userRoleAssign: UserRoleAssign = {
-        resource: new ObjectId(args.resource) as any,
         role: new ObjectId(role._id) as any,
         validFrom: new Date(),
         validUntil: !args.validUntil ? new Date('2222') : args.validUntil,
-        membership: RoleMmbership.USER,
+        membership: !args.membership ? RoleMmbership.USER : args.membership,
         type: args.userType,
       };
+
+      if (args.resource) {
+        userRoleAssign.resource = new ObjectId(args.resource) as any;
+      }
 
       // add user condition to query depending on user type
       const field = getResourceUserFieldBasedOnUserType({
@@ -97,23 +141,33 @@ export class UserRoleAssignService extends GenericCrudService<UserRoleAssignDocu
   };
 
   // assign user to resource
-  checkIfUserIsAssignedToResource = async (args: {
-    userID: string;
-    resource: string;
+  checkIfAssignedToResource = async (args: {
+    userID?: string;
+    resource?: string;
     roleID: string;
     userType: UserType;
+    membership?: RoleMmbership;
   }) => {
-    const query = [
-      { resource: new ObjectId(args.resource) },
-      { role: new ObjectId(args.roleID) },
-    ] as any;
+    const query = [{ role: new ObjectId(args.roleID) }] as any[];
 
-    // add user condition to query depending on user type
-    const field = getResourceUserFieldBasedOnUserType({
-      userType: args.userType,
-    });
+    // add resource condition to query if exists
+    if (args.resource) {
+      query.push({ resource: new ObjectId(args.resource) });
+    }
 
-    query.push({ [field]: new ObjectId(args.userID) });
+    // add membership condition to query if exists
+    if (args.membership) {
+      query.push({ membership: args.membership });
+    }
+
+    if (args.userID) {
+      // add user condition to query depending on user type
+      const field = getResourceUserFieldBasedOnUserType({
+        userType: args.userType,
+      });
+
+      query.push({ [field]: new ObjectId(args.userID) });
+    }
 
     const resourceExists = await this.findOne({
       conditions: {

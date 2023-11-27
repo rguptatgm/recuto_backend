@@ -17,6 +17,7 @@ import {
   hasUserPermissionForNoneResoruce,
 } from 'src/globals/helper/permission.helper';
 import { RequestUser } from 'src/globals/interfaces/global.interface';
+import { ObjectId } from 'mongodb';
 
 export const Permissions = (
   permission: ServerPermission,
@@ -55,8 +56,8 @@ export class PermissionGuard implements CanActivate {
     }
 
     // check when resource is required but not provided in request
-    if (!ignoreResource && resource == null) {
-      throw new BadRequestException('Resource is not provided in request');
+    if (!ignoreResource && resource == null && !ObjectId.isValid(resource)) {
+      throw new BadRequestException('Invalid resource provided.');
     }
 
     // get all permissions for the user
@@ -70,6 +71,8 @@ export class PermissionGuard implements CanActivate {
       });
 
     if (!ignoreResource && resource != null) {
+      reqUser.resource = resource;
+
       // check if user and project has the required permission
       return hasProjectAndUserPermissionForResource({
         user: reqUser,

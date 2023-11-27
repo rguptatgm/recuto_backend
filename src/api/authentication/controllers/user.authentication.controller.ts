@@ -49,9 +49,7 @@ export class UserAuthenticationController {
     const signUpResult = await this.userAuthenticationService.signUp({
       authData: {
         authDto,
-        customData: {
-          resource: '654b6ea0363b40b703cf7ded',
-        }, // pass custom data here and it will be available in all abstract methods of the authentication
+        customData: {}, // pass custom data here and it will be available in all abstract methods of the authentication
       },
     });
     return signUpResult;
