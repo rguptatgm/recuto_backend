@@ -2,7 +2,7 @@
 
 ## Overview
 
-The vondot NestJS Template is a robust backend solution, ideally paired with the [vondot-GmbH/reactJS_template](https://github.com/vondot-GmbH/reactJS_template) for full-stack web application development. This template harnesses the power of NestJS to offer a comprehensive, scalable backend structure, rich with best practices and optimized for building SaaS solutions. It includes everything from authentication and error handling to a solid permissions system, laying the groundwork essential for any project.
+The vondot NestJS Template is a robust backend solution, ideally paired with the [reactJS_template](https://github.com/vondot-GmbH/reactJS_template) for full-stack web application development. This template harnesses the power of NestJS to offer a comprehensive, scalable backend structure, rich with best practices and optimized for building SaaS solutions. It includes everything from authentication and error handling to a solid permissions system, laying the groundwork essential for any project.
 
 For an in-depth understanding and additional details on each aspect of the template, refer to our extensive documentation at [vondot docs](https://docs.vondot.dev/nestjs.docs/overview)
 
