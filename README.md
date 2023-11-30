@@ -1,169 +1,50 @@
-# Project Requirements
+# vondot - NestJS Template
 
 ## Overview
 
-This project is a TypeScript-based Node.js application that uses the NestJS framework and the Mongoose library to interact with a MongoDB database. The application provides a GenericCrudService class that provides default CRUD (Create, Read, Update, Delete) methods for working with MongoDB documents.
+The vondot NestJS Template is a robust backend solution, ideally paired with the [vondot-GmbH/reactJS_template](https://github.com/vondot-GmbH/reactJS_template) for full-stack web application development. This template harnesses the power of NestJS to offer a comprehensive, scalable backend structure, rich with best practices and optimized for building SaaS solutions. It includes everything from authentication and error handling to a solid permissions system, laying the groundwork essential for any project.
 
-## Folder Structure
+For an in-depth understanding and additional details on each aspect of the template, refer to our extensive documentation at [vondot docs](https://docs.vondot.dev/nestjs.docs/overview)
 
-The project should follow this folder structure:
+## Installation
 
-https://tree.nathanfriend.io/
-
-```plaintext
-.
-└── src/
-    ├── api/
-    │   └── <name>/
-    │       ├── controllers/
-    │       │   └── <name>.controller.ts
-    │       ├── services/
-    │       │   └── <name>.service.ts
-    │       └── <name>.module.ts
-    ├── dto/
-    │   └── <name>/
-    │       ├── base.<name>.dto.ts
-    │       ├── create.<name>.dto.ts
-    │       └── update.<name>.dto.ts
-    ├── globals/
-    │   ├── enums/
-    │   │   └── <name>.enum.ts
-    │   ├── helpers/
-    │   │   └── <name>.helper.ts
-    │   ├── interfaces/
-    │   │   └── <name>.helper.ts
-    │   └── services/
-    │       └── <name>.service.ts
-    ├── guards/
-    │   └── <name>.guard.ts
-    ├── interceptors/
-    │   └── <name>.interceptor.ts
-    └── schemas/
-        └── <name>/
-            └── <name>.schema.ts
+```bash
+git clone https://github.com/vondot-GmbH/nestJS_template.git
+cd nestJS_template
+npm install
+npm run start
 ```
 
-- `src/`: Contains the source code for the application.
-- `src/app.module.ts`: Defines the main application module.
-- `src/main.ts`: Defines the entry point for the application.
-- `src/controllers/`: Contains the controllers for the application.
-- `src/services/`: Contains the services for the application.
-- `src/models/`: Contains the Mongoose models for the application.
-- `src/interfaces/`: Contains the TypeScript interfaces for the application.
-- `src/utils/`: Contains utility functions for the application.
-- `test/`: Contains the unit tests for the application.
-- `node_modules/`: Contains the dependencies for the application.
-- `package.json`: Defines the dependencies and scripts for the application.
-- `tsconfig.json`: Defines the TypeScript compiler options for the application.
-- `README.md`: Contains the documentation for the application.
+## Key Features
 
-## Coding Conventions
+### Permission Guard
 
-The project should follow these coding conventions:
+- **Role-Based Access Control:** Implements a customizable PermissionGuard for role-based access to endpoints and resources.
+- **Resource-Specific Permissions:** Differentiates between resource-specific and general permissions, handling them efficiently based on the `ignoreResource` flag.
 
-- Use TypeScript as the primary programming language.
-```ts
-class Person {
-  constructor(private name: string, private age: number) {}
+### Services in User Role Assign Module
 
-  public sayHello(): void {
-    console.log(`Hello, my name is ${this.name} and I am ${this.age} years old.`);
-  }
-}
-```
+- **UserRoleAssignService:** Manages user-role-resource relationships and offers methods like `getUserPermissionsForAllResources`, `assignUserToResource`, and `checkIfUserIsAssignedToResource`.
 
-- Use named arguments for methods
-- Use npm to manage dependencies.
-- Use the NestJS framework to build the application.
-- Use the Mongoose library to interact with MongoDB databases.
-- Use the `GenericCrudService` class to provide default CRUD methods for working with MongoDB documents.
-- Use the ObjectId class from the mongodb package to represent MongoDB ObjectIds.
-- Use the `async/await syntax` for handling asynchronous operations.
-- Use the `prepareCondition` function to prepare a filter query for finding a single document by its _id field.
+### Authentication
 
-## Naming Conventions
-Use the following naming conventions:
-- Use `PascalCase` for class names.
-- Use `camelCase` for variable and function names.
-- Use `dot.notation` for file names.
+- **Customizable Authentication Service:** Extends `GenericAuthenticationService` for tailored user authentication, including user identification, post-sign-up actions, and controller integration for sign-up and sign-in endpoints.
 
+### Roles and Permissions Definition
 
-## Comments
-Use `comments` to document the code as necessary.
-- Use comments to explain what the code does, not how it does it. The code should be self-explanatory, and comments should provide additional context or explain complex logic.
-- Use comments to document the purpose of functions, classes, and variables. Comments should explain what the code is intended to do, not how it does it.
-- Use comments to document any assumptions or constraints that the code relies on. This can help other developers understand the context in which the code is used.
-- Use comments to document any known issues or limitations with the code. This can help other developers avoid common pitfalls or work around known issues.
-- Use consistent formatting for comments. For example, use a consistent style for commenting function parameters, return values, and exceptions.
-Avoid commenting obvious or trivial code. Comments should add value to the code, not clutter it with unnecessary information.
+- **Introduction to RBAC:** Simplifies access management, grouping users into roles based on responsibilities.
+- **Permission Types:** Organizes permissions into server-side and client-side categories, with the flexibility to extend as needed.
 
-## Missing stuff for outsourcing
-- Explain queryHelper
-- Explain documentation
-- Explain idea behind folder structure (why schemas not in api folder, etc)
-- Projection
-- Localization
-- Explain each file (e.g. structure of schema, controller, service, etc.) and add examples
-- Explain roles and permissions structure (maybe also add mind map)
-- Move documentation to something like Mintlify to make in more readable?
-- Add examples for everything!
-- Pullrequest (sizes & duration)
-- Design (Figma)
-- Communication (Slack)
-- Daily updates
-- Task board to see current progress (Gleap?)
-- Time tracking?
-- Define each tasks for outsource developers in a document?
-- What do they need to do when completing a task before they allowed to create a PR? What do they need to test?
+### Localization
 
+- **Efficient Localization Handling:** Utilizes `localizeDocument` method for document localization, offering simplicity and backward compatibility.
 
-# Softwareanforderungsdokument erstellen mit folgenden Inhalten
+### Error Handling and Logging
 
-### Einführung:
-- Projektüberblick
-- Ziele und Zweck des Projekts
-- Kontaktdaten der Projektleitung
+- **Structured Error Management:** Uses custom `RequestHttpException` class for consistent and informative error handling across the application.
+- **Global Exception Handling:** Integrates with NestJS's `HttpExceptionFilter` for uniform error responses and optional Sentry logging.
 
-### Funktionale Anforderungen:
-- Beschreibung der zu entwickelnden Funktionen
-- Use-Cases und Geschäftsregeln
-- Datenanforderungen
+### Generic CRUD Client
 
-###  Nicht-funktionale Anforderungen:
-- Performance-Anforderungen
-- Sicherheitsanforderungen
-- Usability und Zugänglichkeit
-
-### Technische Anforderungen:
-- Technologie-Stack
-- Drittanbieter-Integrationen
-- Plattform- und Browser-Kompatibilität
-
-### Code-Konventionen und Standards:
-- Coding-Standards, einschließlich Namensgebung, Formatierung und Kommentierung
-- Verzeichnis- und Dateistruktur
-- Code-Dokumentation Standards
-
-### Qualitätssicherung und Testing:
-- Teststrategie
-- Akzeptanzkriterien
-- Fehlerbehandlungs- und Debugging-Verfahren
-
-### Kommunikation und Berichterstattung:
-- Kommunikationspläne
-- Berichtsformat und -frequenz
-
-### Lieferplan:
-- Meilensteine und Liefertermine
-- Abnahmeverfahren
-
-### Rechtliche und vertragliche Anforderungen:
-- Eigentumsrechte
-- Datenschutz und Compliance-Anforderungen
-
-### Anhänge:
-- Glossar
-- Referenzen zu unterstützenden Dokumenten oder externen Ressourcen
-
-### Änderungsprotokoll:
-- Verfolgung von Änderungen am Dokument über die Zeit
+- **Efficient Data Operations:** Abstract `GenericCrudService` class provides essential CRUD operations, reducing repetitive code and enhancing efficiency.
+- **Customization Flexibility:** Allows for the addition of specific functionalities to meet unique project requirements.
