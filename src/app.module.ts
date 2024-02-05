@@ -31,9 +31,9 @@ import { InvitationModule } from './api/Invitation/invitation.module';
     }),
 
     MongooseModule.forRoot(process.env.MONGO_DB_CONNECT_URL, {
-      // useNewUrlParser: true,
-      // useFindAndModify: false,
-      // useUnifiedTopology: true,
+       //useNewUrlParser: true,
+       //useFindAndModify: false,
+       //useUnifiedTopology: true,
     }),
 
     //! Modules
