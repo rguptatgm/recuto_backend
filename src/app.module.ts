@@ -17,6 +17,7 @@ import { DataGeneratorModule } from './data.generators/data.generator.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResourceInterceptor } from './interceptors/resource.interceptor';
 import { InvitationModule } from './api/Invitation/invitation.module';
+import {OrganizationModule} from "./api/organization/organization.module";
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { InvitationModule } from './api/Invitation/invitation.module';
     GlobalsModule,
     DataGeneratorModule,
     InvitationModule,
+    OrganizationModule
   ],
   controllers: [AppController],
   providers: [
