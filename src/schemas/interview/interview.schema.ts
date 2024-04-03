@@ -9,9 +9,6 @@ export class InterviewProtection{
         return {
           title: 1,
           description: 1,
-          thinkingTime: 1,
-          maxAnswerTime: 1,
-          maxRetakes: 1,
           system: 1,
         };
     }
@@ -32,15 +29,6 @@ export class InterviewProtection{
 
     @Prop()
     description: string;
-
-    @Prop()
-    thinkingTime: number;
-
-    @Prop()
-    maxAnswerTime: number;
-
-    @Prop()
-    maxRetakes: number;
 
     //@Prop()
     //organizationID: TODO;

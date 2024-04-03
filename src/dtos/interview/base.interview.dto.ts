@@ -13,21 +13,6 @@ export class BaseInterviewDto {
     @ApiProperty({ type: String })
     description: string;
 
-    @IsOptional()
-    @IsNumber()
-    @ApiProperty({ type: Number })
-    thinkingTime: number;
-
-    @IsOptional()
-    @IsNumber()
-    @ApiProperty({ type: Number })
-    maxAnswerTime: number;
-
-    @IsOptional()
-    @IsNumber()
-    @ApiProperty({ type: Number })
-    maxRetakes: number;
-
     //organizationID: TODO;
 
 

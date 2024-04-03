@@ -18,6 +18,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResourceInterceptor } from './interceptors/resource.interceptor';
 import { InvitationModule } from './api/Invitation/invitation.module';
 import { InterviewModule } from './api/interview/interview.module';
+import { QuestionModule } from './api/question/question.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { InterviewModule } from './api/interview/interview.module';
     DataGeneratorModule,
     InvitationModule,
     InterviewModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [

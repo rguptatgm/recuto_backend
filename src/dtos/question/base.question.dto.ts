@@ -43,6 +43,7 @@ export class BaseQuestionDto {
     @ApiProperty({ type: Number })
     sort: number;
 
+
     //interviewID: TODO;
 
     //organizationID: TODO;
