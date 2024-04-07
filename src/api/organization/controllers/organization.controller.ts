@@ -1,0 +1,46 @@
+import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
+
+import { ApiTags, ApiBearerAuth, ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiOperation } from "@nestjs/swagger";
+import { JwtAuthenticationGuard } from "src/guards/jwt.authentication.guard";
+import { PermissionGuard, Permissions } from "src/guards/permission.guard";
+import { ServerPermission } from 'src/globals/enums/application.permission.enum';
+import {CreateOrganizationDto} from "../../../dtos/organization/create.organization.dto";
+import {OrganizationProtection} from "../../../schemas/organization/organization.schema";
+import {OrganizationService} from "../services/organization.service";
+
+// documentation
+@ApiTags('organizations')
+@ApiBearerAuth('JWT')
+//
+// @UseInterceptors(ResourceInterceptor) // TODO fix this
+@UseGuards(JwtAuthenticationGuard)
+@Controller('organizations')
+export class OrganizationController{
+    constructor(private readonly organizationService: OrganizationService){}
+
+    //! CREATE INVITATION
+
+    // documentation
+    @ApiCreatedResponse({ description: 'Resource successfully created.' })
+    @ApiForbiddenResponse({ description: 'Forbidden resource.' })
+    @ApiBadRequestResponse({ description: 'Validation failed.' })
+    @ApiOperation({
+        summary: 'Create Organization',
+    })
+    //
+    //
+    @UseGuards(PermissionGuard)
+    @Permissions(ServerPermission.CREATE_ORGANIZATION, true)
+    @Post()
+    async createOrganization(
+        @Body() createOrganizationDto: CreateOrganizationDto,
+        @Req() req: Request,
+    ): Promise<any>{
+        const createdOrganization = await this.organizationService.create({
+            document: createOrganizationDto,
+            projection: OrganizationProtection.DEFAULT,
+        });
+
+        return createdOrganization;
+    }
+}

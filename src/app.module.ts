@@ -17,6 +17,7 @@ import { DataGeneratorModule } from './data.generators/data.generator.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResourceInterceptor } from './interceptors/resource.interceptor';
 import { InvitationModule } from './api/Invitation/invitation.module';
+import {OrganizationModule} from "./api/organization/organization.module";
 import { InterviewModule } from './api/interview/interview.module';
 import { QuestionModule } from './api/question/question.module';
 
@@ -48,6 +49,7 @@ import { QuestionModule } from './api/question/question.module';
     GlobalsModule,
     DataGeneratorModule,
     InvitationModule,
+    OrganizationModule
     InterviewModule,
     QuestionModule,
   ],
