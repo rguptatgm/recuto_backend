@@ -49,7 +49,7 @@ import { QuestionModule } from './api/question/question.module';
     GlobalsModule,
     DataGeneratorModule,
     InvitationModule,
-    OrganizationModule
+    OrganizationModule,
     InterviewModule,
     QuestionModule,
   ],
