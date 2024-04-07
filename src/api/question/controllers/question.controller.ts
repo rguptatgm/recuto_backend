@@ -17,7 +17,7 @@ import { QuestionProtection } from "src/schemas/question/question.schema";
 export class QuestionController{
     constructor(private readonly questionService: QuestionService){}
 
-    //! CREATE INVITATION
+    //! CREATE QUESTION
 
     // documentation
     @ApiCreatedResponse({ description: 'Resource successfully created.' })
