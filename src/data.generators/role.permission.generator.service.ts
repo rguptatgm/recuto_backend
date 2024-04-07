@@ -20,7 +20,7 @@ export class RolePermissionGeneratorService {
 
   // create default roles and permissions
   async createDefaultRoleAndPermissions(): Promise<void> {
-    const generateRolesAndPermission = false; //! set true -> to create default roles and permissions
+    const generateRolesAndPermission = true; //! set true -> to create default roles and permissions
 
     // if any role or permission are in the collection return otherwise generate
     if (!generateRolesAndPermission) {

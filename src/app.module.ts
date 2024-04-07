@@ -18,6 +18,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResourceInterceptor } from './interceptors/resource.interceptor';
 import { InvitationModule } from './api/Invitation/invitation.module';
 import {OrganizationModule} from "./api/organization/organization.module";
+import { InterviewModule } from './api/interview/interview.module';
+import { QuestionModule } from './api/question/question.module';
 
 @Module({
   imports: [
@@ -32,9 +34,9 @@ import {OrganizationModule} from "./api/organization/organization.module";
     }),
 
     MongooseModule.forRoot(process.env.MONGO_DB_CONNECT_URL, {
-      // useNewUrlParser: true,
-      // useFindAndModify: false,
-      // useUnifiedTopology: true,
+       //useNewUrlParser: true,
+       //useFindAndModify: false,
+       //useUnifiedTopology: true,
     }),
 
     //! Modules
@@ -48,6 +50,8 @@ import {OrganizationModule} from "./api/organization/organization.module";
     DataGeneratorModule,
     InvitationModule,
     OrganizationModule
+    InterviewModule,
+    QuestionModule,
   ],
   controllers: [AppController],
   providers: [

@@ -35,6 +35,7 @@ export enum ServerPermission {
   ACCEPT_PROJECT_INVITATION = 'ACCEPT_PROJECT_INVITATION',
   DECLINE_PROJECT_INVITATION = 'DECLINE_PROJECT_INVITATION',
   CREATE_ORGANIZATION = 'CREATE_ORGANIZATION'
+  CREATE_INTERVIEW = 'CREATE_INTERVIEW',
 }
 
 export enum ClientPermission {
@@ -60,6 +61,7 @@ export const userServerPermissionNoneResource = [
   ServerPermission.DECLINE_PROJECT_INVITATION,
   ServerPermission.CREATE_PROJECT,
   ServerPermission.CREATE_ORGANIZATION,
+  ServerPermission.CREATE_INTERVIEW,
 ];
 
 export const userClientPermission = [ClientPermission.USER_PROFILE_MENU];
