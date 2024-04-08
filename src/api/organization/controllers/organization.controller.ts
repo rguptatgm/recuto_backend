@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
+import {Body, Controller, Get, Post, Req, UseGuards} from "@nestjs/common";
 
 import { ApiTags, ApiBearerAuth, ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiOperation } from "@nestjs/swagger";
 import { JwtAuthenticationGuard } from "src/guards/jwt.authentication.guard";
@@ -7,6 +7,10 @@ import { ServerPermission } from 'src/globals/enums/application.permission.enum'
 import {CreateOrganizationDto} from "../../../dtos/organization/create.organization.dto";
 import {OrganizationProtection} from "../../../schemas/organization/organization.schema";
 import {OrganizationService} from "../services/organization.service";
+import {Request} from "express";
+import {UserType} from "../../../globals/enums/global.enum";
+import {UserRoleAssignService} from "../../shared/userRoleAssign/services/user.role.assign.service";
+import {InvitationPopulate, InvitationProtection} from "../../../schemas/invitation/invitation.schema";
 
 // documentation
 @ApiTags('organizations')
@@ -16,7 +20,10 @@ import {OrganizationService} from "../services/organization.service";
 @UseGuards(JwtAuthenticationGuard)
 @Controller('organizations')
 export class OrganizationController{
-    constructor(private readonly organizationService: OrganizationService){}
+    constructor(
+        private readonly organizationService: OrganizationService,
+        private readonly userRoleAssignService: UserRoleAssignService,
+    ){}
 
     //! CREATE INVITATION
 
@@ -42,5 +49,22 @@ export class OrganizationController{
         });
 
         return createdOrganization;
+    }
+
+    @ApiCreatedResponse({ description: 'Resource successfully returned.' })
+    @ApiForbiddenResponse({ description: 'Forbidden resource.' })
+    @ApiOperation({
+        summary: 'Get all organizations of the logged in user.',
+    })
+    //
+    //
+    @UseGuards(PermissionGuard)
+    @Permissions(ServerPermission.GET_PROJECTS, true)
+    @Get()
+    async getOrganizations(@Req() req: Request): Promise<any> {
+        return await this.organizationService.find({
+            conditions: { },
+            projection: { title: 1 },
+        });
     }
 }
