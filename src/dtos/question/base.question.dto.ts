@@ -47,10 +47,6 @@ export class BaseQuestionDto {
     @IsOptional()
     @ApiProperty({type: ObjectId})
     interviewID: ObjectId;
-
-    @IsOptional()
-    @ApiProperty({type: ObjectId})
-    organizationID: ObjectId;
 }
 
 export default BaseQuestionDto;

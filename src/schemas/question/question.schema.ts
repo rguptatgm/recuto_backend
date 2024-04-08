@@ -11,14 +11,13 @@ export class QuestionProtection{
         return {
           title: 1,
           fullQuestion: 1,
-          type:1,
-          videoUrl:1,
+          type: 1,
+          videoUrl: 1,
           thinkingTime: 1,
           maxAnswerTime: 1,
           maxRetakes: 1,
-          sort:1,
-          interviewID:1,
-          organizationID:1,
+          sort: 1,
+          interviewID: 1,
           system: 1,
         };
     }
@@ -63,12 +62,6 @@ export class QuestionProtection{
       ref: 'Interview',
     })
     interviewID: Interview;
-
-    //@Prop({
-    //  type: MongooseSchema.Types.ObjectId,
-    //  ref: 'Organization',
-    //})
-    //organizationID: Oranization;
   
     @Prop({ type: SystemSchema, required: false })
     system?: System;

@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
+import { ObjectId } from "mongodb";
 
 export class BaseInterviewDto {
 
@@ -13,9 +14,9 @@ export class BaseInterviewDto {
     @ApiProperty({ type: String })
     description: string;
 
-    //organizationID: TODO;
-
-
+    @IsOptional()
+    @ApiProperty({type: ObjectId})
+    organizationID: ObjectId;
 }
 
 export default BaseInterviewDto;
