@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiTags, ApiBearerAuth, ApiBadRequestResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiOperation } from "@nestjs/swagger";
 import { JwtAuthenticationGuard } from "src/guards/jwt.authentication.guard";
 import { PermissionGuard, Permissions } from "src/guards/permission.guard";
@@ -29,7 +29,7 @@ export class QuestionController{
     //
     //
     @UseGuards(PermissionGuard)
-    @Permissions(ServerPermission.CREATE_INTERVIEW, true)
+    @Permissions(ServerPermission.CREATE_QUESTION, true)
     @Post()
     async createQuestion(
         @Body() createQuestionDto: CreateQuestionDto,
@@ -41,5 +41,22 @@ export class QuestionController{
         });
 
         return createdQuestion;
+    }
+
+    @ApiCreatedResponse({ description: 'Resource successfully returned.' })
+    @ApiForbiddenResponse({ description: 'Forbidden resource.' })
+    @ApiOperation({
+        summary: 'Get all questions.',
+    })
+    //
+    //
+    @UseGuards(PermissionGuard)
+    @Permissions(ServerPermission.GET_QUESTION, true)
+    @Get()
+    async getOrganizations(@Req() req: Request): Promise<any> {
+        return await this.questionService.find({
+            conditions: { },
+            projection: QuestionProtection.DEFAULT,
+        });
     }
 }

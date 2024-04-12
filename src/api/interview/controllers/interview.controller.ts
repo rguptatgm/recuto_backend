@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { InterviewService } from "../services/interview.service";
 import { InterviewProtection } from "src/schemas/interview/interview.schema";
 import { CreateInterviewDto } from "src/dtos/interview/create.interview.dto";
@@ -41,5 +41,22 @@ export class InterviewController{
         });
 
         return createdInterview;
+    }
+
+    @ApiCreatedResponse({ description: 'Resource successfully returned.' })
+    @ApiForbiddenResponse({ description: 'Forbidden resource.' })
+    @ApiOperation({
+        summary: 'Get all organizations of the logged in user.',
+    })
+    //
+    //
+    @UseGuards(PermissionGuard)
+    @Permissions(ServerPermission.GET_INTERVIEW, true)
+    @Get()
+    async getOrganizations(@Req() req: Request): Promise<any> {
+        return await this.interviewService.find({
+            conditions: { },
+            projection: InterviewProtection.DEFAULT,
+        });
     }
 }
