@@ -1,7 +1,6 @@
 import { Schema, Prop, SchemaFactory } from "@nestjs/mongoose";
 import { SystemSchema, System } from "../system.schema";
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { ObjectId } from "mongodb";
 import { Interview } from "../interview/interview.schema";
 
 export type QuestionDocument = Question & Document;

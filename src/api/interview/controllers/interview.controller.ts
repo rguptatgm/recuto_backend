@@ -46,7 +46,7 @@ export class InterviewController{
     @ApiCreatedResponse({ description: 'Resource successfully returned.' })
     @ApiForbiddenResponse({ description: 'Forbidden resource.' })
     @ApiOperation({
-        summary: 'Get all organizations of the logged in user.',
+        summary: 'Get all interviews.',
     })
     //
     //

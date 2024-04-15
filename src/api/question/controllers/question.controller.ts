@@ -53,7 +53,7 @@ export class QuestionController{
     @UseGuards(PermissionGuard)
     @Permissions(ServerPermission.GET_QUESTION, true)
     @Get()
-    async getOrganizations(@Req() req: Request): Promise<any> {
+    async getQuestions(@Req() req: Request): Promise<any> {
         return await this.questionService.find({
             conditions: { },
             projection: QuestionProtection.DEFAULT,
