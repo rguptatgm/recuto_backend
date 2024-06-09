@@ -17,6 +17,11 @@ export class BaseQuestionDto {
     @IsOptional()
     @IsString()
     @ApiProperty({type:String})
+    type: string;
+
+    @IsOptional()
+    @IsString()
+    @ApiProperty({type:String})
     videoUrl: string;
 
     @IsOptional()

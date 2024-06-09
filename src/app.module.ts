@@ -22,6 +22,7 @@ import { InterviewModule } from './api/interview/interview.module';
 import { QuestionModule } from './api/question/question.module';
 import { ParticipantModule } from './api/participant/participant.module';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -54,6 +55,7 @@ import { ParticipantModule } from './api/participant/participant.module';
     InterviewModule,
     QuestionModule,
     ParticipantModule
+
   ],
   controllers: [AppController],
   providers: [

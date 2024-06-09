@@ -30,11 +30,15 @@ export class QuestionProtection {
     timestamps: { createdAt: 'system.createdAt', updatedAt: 'system.modifiedAt' },
 })
 export class Question {
+
     @Prop()
     title: string;
 
     @Prop()
     fullQuestion: string;
+
+    @Prop()
+    type: string;
 
     @Prop()
     videoUrl: string;
