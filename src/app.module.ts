@@ -20,7 +20,9 @@ import { InvitationModule } from './api/Invitation/invitation.module';
 import {OrganizationModule} from "./api/organization/organization.module";
 import { InterviewModule } from './api/interview/interview.module';
 import { QuestionModule } from './api/question/question.module';
-import { ParticipantModule } from './api/participant/participant.module';
+import { CandidateModule } from './api/candidate/candidate.module';
+import { AnswerModule } from './api/answer/answer.module';
+
 
 
 @Module({
@@ -54,7 +56,8 @@ import { ParticipantModule } from './api/participant/participant.module';
     OrganizationModule,
     InterviewModule,
     QuestionModule,
-    ParticipantModule
+    CandidateModule,
+    AnswerModule,
 
   ],
   controllers: [AppController],

@@ -21,7 +21,6 @@ export class InterviewProtection{
     }
 }
 
-
 @Schema({
     timestamps: { createdAt: 'system.createdAt', updatedAt: 'system.modifiedAt' },
   })

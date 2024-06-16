@@ -42,7 +42,10 @@ export enum ServerPermission {
     CREATE_QUESTION = 'CREATE_QUESTION',
     GET_QUESTION = 'GET_QUESTION',
     GET_PARTICIPANT = "GET_PARTICIPANT",
-    CREATE_PARTICIPANT = "CREATE_PARTICIPANT"
+    CREATE_PARTICIPANT = "CREATE_PARTICIPANT",
+    GET_ANSWER = "GET_ANSWER",
+    CREATE_ANSWER = "CREATE_ANSWER",
+  
 }
 
 export enum ClientPermission {
@@ -73,6 +76,10 @@ export const userServerPermissionNoneResource = [
   ServerPermission.GET_INTERVIEW,
   ServerPermission.CREATE_QUESTION,
   ServerPermission.GET_QUESTION,
+  ServerPermission.CREATE_ANSWER,
+  ServerPermission.GET_ANSWER,
+  ServerPermission.CREATE_PARTICIPANT,
+  ServerPermission.GET_PARTICIPANT,
 ];
 
 export const userClientPermission = [ClientPermission.USER_PROFILE_MENU];

@@ -3,7 +3,7 @@ import { IsOptional, IsString, IsEmail, IsDate, IsArray, IsUrl } from 'class-val
 import { Type } from 'class-transformer';
 import { ObjectId } from "mongodb";
 
-export class BaseParticipantDto {
+export class BaseCandidateDto {
     @IsOptional()
     @IsString()
     @ApiProperty({ type: String })
@@ -27,13 +27,11 @@ export class BaseParticipantDto {
 
     @IsOptional()
     @ApiProperty({ type: ObjectId })
-    interviewId: ObjectId;
+    interviewID: ObjectId;
 
     @IsOptional()
-    @IsArray()
-    @IsUrl({}, { each: true })
-    @ApiProperty({ type: [String] })
-    videoUrls?: string[];
+    @ApiProperty({ type: ObjectId })
+    organizationID: ObjectId;
 }
 
-export default BaseParticipantDto;
+export default BaseCandidateDto;
