@@ -17,6 +17,13 @@ import { DataGeneratorModule } from './data.generators/data.generator.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResourceInterceptor } from './interceptors/resource.interceptor';
 import { InvitationModule } from './api/Invitation/invitation.module';
+import {OrganizationModule} from "./api/organization/organization.module";
+import { InterviewModule } from './api/interview/interview.module';
+import { QuestionModule } from './api/question/question.module';
+import { CandidateModule } from './api/candidate/candidate.module';
+import { AnswerModule } from './api/answer/answer.module';
+
+
 
 @Module({
   imports: [
@@ -31,9 +38,9 @@ import { InvitationModule } from './api/Invitation/invitation.module';
     }),
 
     MongooseModule.forRoot(process.env.MONGO_DB_CONNECT_URL, {
-      // useNewUrlParser: true,
-      // useFindAndModify: false,
-      // useUnifiedTopology: true,
+       //useNewUrlParser: true,
+       //useFindAndModify: false,
+       //useUnifiedTopology: true,
     }),
 
     //! Modules
@@ -46,6 +53,12 @@ import { InvitationModule } from './api/Invitation/invitation.module';
     GlobalsModule,
     DataGeneratorModule,
     InvitationModule,
+    OrganizationModule,
+    InterviewModule,
+    QuestionModule,
+    CandidateModule,
+    AnswerModule,
+
   ],
   controllers: [AppController],
   providers: [
